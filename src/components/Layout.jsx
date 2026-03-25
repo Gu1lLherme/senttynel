@@ -20,7 +20,7 @@ export default function Layout() {
 
       {/* Bottom Navigation */}
       <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-sm z-20">
-        <div className="glass-card border-t border-white/10 px-2 py-2">
+        <div className="bg-white/90 backdrop-blur-xl border-t border-gray-200 px-2 py-2 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
           <div className="flex justify-around items-center">
             {navItems.map(({ path, icon: Icon, label }) => {
               const isActive = location.pathname === path;
@@ -30,20 +30,20 @@ export default function Layout() {
                   to={path}
                   className={`flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all duration-200 cursor-pointer min-w-[56px] ${
                     isActive
-                      ? 'text-primary'
-                      : 'text-muted-foreground hover:text-foreground'
+                      ? 'text-blue-600'
+                      : 'text-gray-400 hover:text-gray-600'
                   }`}
                 >
                   <div className={`p-1.5 rounded-lg transition-all duration-200 ${
-                    isActive ? 'bg-primary/20' : ''
+                    isActive ? 'bg-blue-50' : ''
                   }`}>
                     <Icon
                       size={20}
-                      className={isActive ? 'text-primary' : 'text-muted-foreground'}
+                      className={isActive ? 'text-blue-600' : 'text-gray-400'}
                     />
                   </div>
                   <span className={`text-xs font-medium ${
-                    isActive ? 'text-primary' : 'text-muted-foreground'
+                    isActive ? 'text-blue-600' : 'text-gray-400'
                   }`}>
                     {label}
                   </span>

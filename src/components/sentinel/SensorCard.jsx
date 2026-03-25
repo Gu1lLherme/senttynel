@@ -1,39 +1,29 @@
-export default function SensorCard({ icon, label, value, color = 'cyan', active = true }) {
+export default function SensorCard({ icon, label, value, color = 'blue', active = true }) {
   const colorMap = {
-    cyan: {
-      bg: 'bg-cyan-500/10',
-      border: 'border-cyan-500/20',
-      text: 'text-cyan-400',
-      dot: 'bg-cyan-400',
-      glow: 'shadow-[0_0_20px_rgba(0,245,255,0.15)]'
+    blue: {
+      bg: 'bg-blue-50',
+      border: 'border-blue-100',
+      text: 'text-blue-600',
+      dot: 'bg-blue-500',
     },
     green: {
-      bg: 'bg-green-500/10',
-      border: 'border-green-500/20',
-      text: 'text-green-400',
-      dot: 'bg-green-400',
-      glow: 'shadow-[0_0_20px_rgba(0,255,135,0.15)]'
+      bg: 'bg-emerald-50',
+      border: 'border-emerald-100',
+      text: 'text-emerald-600',
+      dot: 'bg-emerald-500',
     },
-    purple: {
-      bg: 'bg-purple-500/10',
-      border: 'border-purple-500/20',
-      text: 'text-purple-400',
-      dot: 'bg-purple-400',
-      glow: 'shadow-[0_0_20px_rgba(191,95,255,0.15)]'
+    red: {
+      bg: 'bg-red-50',
+      border: 'border-red-100',
+      text: 'text-red-600',
+      dot: 'bg-red-500',
     },
-    orange: {
-      bg: 'bg-orange-500/10',
-      border: 'border-orange-500/20',
-      text: 'text-orange-400',
-      dot: 'bg-orange-400',
-      glow: 'shadow-[0_0_20px_rgba(255,149,0,0.15)]'
-    }
   };
 
-  const c = colorMap[color] || colorMap.cyan;
+  const c = colorMap[color] || colorMap.blue;
 
   return (
-    <div className={`relative rounded-2xl p-4 border ${c.bg} ${c.border} ${c.glow} slide-up`}>
+    <div className={`relative rounded-2xl p-4 border ${c.bg} ${c.border} slide-up`}>
       <div className="flex flex-col items-center gap-2 text-center">
         <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl ${c.bg}`}>
           {icon}

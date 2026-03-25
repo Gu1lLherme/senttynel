@@ -36,8 +36,8 @@ export default function SOSButton({ onActivate }) {
         {/* Outer glow ring */}
         <div className={`absolute inset-0 rounded-full transition-all duration-300 ${
           pressing
-            ? 'shadow-[0_0_60px_rgba(255,45,85,0.8)]'
-            : 'shadow-[0_0_30px_rgba(255,45,85,0.5)] sos-pulse'
+            ? 'shadow-[0_0_60px_rgba(220,38,38,0.6)]'
+            : 'shadow-[0_0_30px_rgba(220,38,38,0.35)] sos-pulse'
         }`} />
 
         {/* Progress ring */}
@@ -53,7 +53,7 @@ export default function SOSButton({ onActivate }) {
               cy="66"
               r="52"
               fill="none"
-              stroke="rgba(255,255,255,0.3)"
+              stroke="rgba(220,38,38,0.4)"
               strokeWidth="4"
               strokeDasharray={circumference}
               strokeDashoffset={strokeDashoffset}
@@ -79,8 +79,8 @@ export default function SOSButton({ onActivate }) {
           `}
           style={{
             boxShadow: pressing
-              ? '0 0 0 6px rgba(255,45,85,0.3), 0 8px 32px rgba(255,45,85,0.6)'
-              : '0 0 0 4px rgba(255,45,85,0.2), 0 8px 24px rgba(255,45,85,0.4)'
+              ? '0 0 0 6px rgba(220,38,38,0.2), 0 8px 32px rgba(220,38,38,0.5)'
+              : '0 0 0 4px rgba(220,38,38,0.15), 0 8px 24px rgba(220,38,38,0.3)'
           }}
         >
           <span className="text-white font-black text-2xl tracking-widest">SOS</span>

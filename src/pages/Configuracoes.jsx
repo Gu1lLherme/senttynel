@@ -10,11 +10,11 @@ import { useToast } from '@/components/ui/use-toast';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 
 const zoneIcons = {
-  home: { icon: Home, color: 'text-cyan-400', bg: 'bg-cyan-500/15', label: 'Casa' },
-  work: { icon: Briefcase, color: 'text-purple-400', bg: 'bg-purple-500/15', label: 'Trabalho' },
-  school: { icon: GraduationCap, color: 'text-yellow-400', bg: 'bg-yellow-500/15', label: 'Escola' },
-  gym: { icon: '💪', color: 'text-green-400', bg: 'bg-green-500/15', label: 'Academia' },
-  other: { icon: MapPin, color: 'text-orange-400', bg: 'bg-orange-500/15', label: 'Outro' },
+  home: { icon: Home, color: 'text-blue-600', bg: 'bg-blue-50', label: 'Casa' },
+  work: { icon: Briefcase, color: 'text-blue-700', bg: 'bg-blue-50', label: 'Trabalho' },
+  school: { icon: GraduationCap, color: 'text-blue-600', bg: 'bg-blue-50', label: 'Escola' },
+  gym: { icon: '💪', color: 'text-red-600', bg: 'bg-red-50', label: 'Academia' },
+  other: { icon: MapPin, color: 'text-gray-600', bg: 'bg-gray-50', label: 'Outro' },
 };
 
 export default function Configuracoes() {
@@ -62,10 +62,10 @@ export default function Configuracoes() {
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center gap-3 mb-1">
-          <div className="w-8 h-8 rounded-xl bg-cyan-500/20 flex items-center justify-center">
-            <Settings size={16} className="text-cyan-400" />
+          <div className="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center">
+            <Settings size={16} className="text-blue-600" />
           </div>
-          <p className="text-cyan-400 text-sm font-semibold uppercase tracking-widest">Sistema</p>
+          <p className="text-blue-600 text-sm font-semibold uppercase tracking-widest">Sistema</p>
         </div>
         <h1 className="text-foreground text-3xl font-black">Configurações</h1>
       </div>
@@ -73,7 +73,7 @@ export default function Configuracoes() {
       {/* Sensor Status */}
       <div className="glass-card rounded-2xl p-4 mb-4">
         <div className="flex items-center gap-3 mb-4">
-          <Shield size={18} className="text-primary" />
+          <Shield size={18} className="text-blue-600" />
           <h2 className="text-foreground font-bold text-base">Status dos Sensores</h2>
         </div>
         <div className="space-y-3">
@@ -82,15 +82,15 @@ export default function Configuracoes() {
             { name: 'GPS / Localização', desc: 'Rastreamento em tempo real', active: true, icon: '📍' },
             { name: 'Botão de Pânico', desc: 'Acionamento manual SOS', active: true, icon: '🆘' },
           ].map(sensor => (
-            <div key={sensor.name} className="flex items-center gap-3 p-3 rounded-xl bg-secondary/40">
+            <div key={sensor.name} className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 border border-gray-100">
               <span className="text-xl">{sensor.icon}</span>
               <div className="flex-1 min-w-0">
                 <p className="text-foreground font-semibold text-sm">{sensor.name}</p>
                 <p className="text-muted-foreground text-xs">{sensor.desc}</p>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                <span className="text-green-400 text-xs font-medium">Ativo</span>
+                <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+                <span className="text-blue-600 text-xs font-medium">Ativo</span>
               </div>
             </div>
           ))}
@@ -100,7 +100,7 @@ export default function Configuracoes() {
       {/* Notifications */}
       <div className="glass-card rounded-2xl p-4 mb-4">
         <div className="flex items-center gap-3 mb-4">
-          <Bell size={18} className="text-primary" />
+          <Bell size={18} className="text-red-600" />
           <h2 className="text-foreground font-bold text-base">Alertas</h2>
         </div>
         <div className="space-y-3">
@@ -124,27 +124,27 @@ export default function Configuracoes() {
       <div className="glass-card rounded-2xl p-4 mb-4">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <MapPin size={18} className="text-primary" />
+            <MapPin size={18} className="text-blue-600" />
             <h2 className="text-foreground font-bold text-base">Zonas Seguras</h2>
           </div>
           <button
             onClick={() => setOpenZone(true)}
-            className="w-8 h-8 rounded-xl bg-primary/20 flex items-center justify-center hover:bg-primary/30 transition-colors cursor-pointer"
+            className="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center hover:bg-blue-100 transition-colors cursor-pointer"
           >
-            <Plus size={16} className="text-primary" />
+            <Plus size={16} className="text-blue-600" />
           </button>
         </div>
 
         {isLoading ? (
           <div className="space-y-2">
-            {[1, 2].map(i => <div key={i} className="h-16 rounded-xl bg-secondary/40 animate-pulse" />)}
+            {[1, 2].map(i => <div key={i} className="h-16 rounded-xl bg-gray-100 animate-pulse" />)}
           </div>
         ) : zones.length === 0 ? (
           <div className="text-center py-6">
             <p className="text-muted-foreground text-sm">Nenhuma zona segura configurada</p>
             <button
               onClick={() => setOpenZone(true)}
-              className="mt-2 text-primary text-sm font-semibold cursor-pointer hover:opacity-80"
+              className="mt-2 text-blue-600 text-sm font-semibold cursor-pointer hover:opacity-80"
             >
               Adicionar casa, trabalho…
             </button>
@@ -155,7 +155,7 @@ export default function Configuracoes() {
               const zc = zoneIcons[zone.icon] || zoneIcons.other;
               const IconComp = typeof zc.icon === 'string' ? null : zc.icon;
               return (
-                <div key={zone.id} className="flex items-center gap-3 p-3 rounded-xl bg-secondary/40">
+                <div key={zone.id} className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 border border-gray-100">
                   <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${zc.bg}`}>
                     {IconComp ? <IconComp size={16} className={zc.color} /> : <span>{zc.icon}</span>}
                   </div>
@@ -171,12 +171,12 @@ export default function Configuracoes() {
                     <AlertDialogTrigger asChild>
                       <button
                         aria-label={`Remover ${zone.name}`}
-                        className="w-8 h-8 rounded-xl bg-red-500/10 hover:bg-red-500/20 flex items-center justify-center transition-colors cursor-pointer"
+                        className="w-8 h-8 rounded-xl bg-red-50 hover:bg-red-100 flex items-center justify-center transition-colors cursor-pointer"
                       >
-                        <Trash2 size={13} className="text-red-400" />
+                        <Trash2 size={13} className="text-red-500" />
                       </button>
                     </AlertDialogTrigger>
-                    <AlertDialogContent className="bg-card border-border max-w-sm mx-auto">
+                    <AlertDialogContent className="bg-white border-gray-200 max-w-sm mx-auto">
                       <AlertDialogHeader>
                         <AlertDialogTitle>Remover zona?</AlertDialogTitle>
                         <AlertDialogDescription>
@@ -187,7 +187,7 @@ export default function Configuracoes() {
                         <AlertDialogCancel>Cancelar</AlertDialogCancel>
                         <AlertDialogAction
                           onClick={() => deleteZone.mutate(zone.id)}
-                          className="bg-destructive text-destructive-foreground"
+                          className="bg-red-600 text-white hover:bg-red-700"
                         >
                           Remover
                         </AlertDialogAction>
@@ -202,16 +202,16 @@ export default function Configuracoes() {
       </div>
 
       {/* Privacy note */}
-      <div className="p-3 rounded-2xl bg-green-500/10 border border-green-500/20">
-        <p className="text-green-400 text-xs font-semibold mb-1">🔐 Privacidade por Design</p>
-        <p className="text-green-300/70 text-xs">
+      <div className="p-3 rounded-2xl bg-blue-50 border border-blue-100">
+        <p className="text-blue-700 text-xs font-semibold mb-1">🔐 Privacidade por Design</p>
+        <p className="text-blue-600/70 text-xs">
           Todo processamento primário acontece no dispositivo. Dados brutos não são enviados para a nuvem.
         </p>
       </div>
 
       {/* Zone Dialog */}
       <Dialog open={openZone} onOpenChange={setOpenZone}>
-        <DialogContent className="bg-card border-border max-w-sm mx-auto rounded-3xl">
+        <DialogContent className="bg-white border-gray-200 max-w-sm mx-auto rounded-3xl">
           <DialogHeader>
             <DialogTitle className="text-foreground text-xl font-black">Nova Zona Segura</DialogTitle>
           </DialogHeader>
@@ -223,7 +223,7 @@ export default function Configuracoes() {
                 placeholder="Ex: Minha Casa"
                 value={zoneForm.name}
                 onChange={e => setZoneForm({ ...zoneForm, name: e.target.value })}
-                className="bg-secondary/50 border-border rounded-xl"
+                className="bg-gray-50 border-gray-200 rounded-xl"
                 required
               />
             </div>
@@ -234,7 +234,7 @@ export default function Configuracoes() {
                 placeholder="Rua, número, cidade"
                 value={zoneForm.address}
                 onChange={e => setZoneForm({ ...zoneForm, address: e.target.value })}
-                className="bg-secondary/50 border-border rounded-xl"
+                className="bg-gray-50 border-gray-200 rounded-xl"
                 required
               />
             </div>
@@ -249,12 +249,12 @@ export default function Configuracoes() {
                       type="button"
                       onClick={() => setZoneForm({ ...zoneForm, icon: key })}
                       className={`p-3 rounded-xl flex flex-col items-center gap-1 transition-all cursor-pointer ${
-                        zoneForm.icon === key ? `${val.bg} border-2 border-current ${val.color}` : 'bg-secondary/50 border-2 border-transparent'
+                        zoneForm.icon === key ? `${val.bg} border-2 border-blue-400 ${val.color}` : 'bg-gray-50 border-2 border-transparent'
                       }`}
                     >
-                      {Ic ? <Ic size={18} className={zoneForm.icon === key ? val.color : 'text-muted-foreground'} />
+                      {Ic ? <Ic size={18} className={zoneForm.icon === key ? val.color : 'text-gray-400'} />
                            : <span className="text-lg">{val.icon}</span>}
-                      <span className={`text-xs ${zoneForm.icon === key ? val.color : 'text-muted-foreground'}`}>{val.label}</span>
+                      <span className={`text-xs ${zoneForm.icon === key ? val.color : 'text-gray-400'}`}>{val.label}</span>
                     </button>
                   );
                 })}
@@ -263,7 +263,7 @@ export default function Configuracoes() {
             <button
               type="submit"
               disabled={createZone.isPending}
-              className="w-full py-3 rounded-2xl bg-primary text-primary-foreground font-bold text-base hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-50"
+              className="w-full py-3 rounded-2xl bg-blue-600 text-white font-bold text-base hover:bg-blue-700 transition-colors cursor-pointer disabled:opacity-50"
             >
               {createZone.isPending ? 'Salvando…' : 'Adicionar Zona'}
             </button>

@@ -17,13 +17,13 @@ const AuthenticatedApp = () => {
 
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-background">
+      <div className="fixed inset-0 flex items-center justify-center bg-white">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center">
+          <div className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center">
             <span className="text-3xl">🛡️</span>
           </div>
-          <div className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
-          <p className="text-muted-foreground text-sm">Carregando SENTINEL…</p>
+          <div className="w-8 h-8 border-2 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
+          <p className="text-gray-500 text-sm">Carregando SENTINEL…</p>
         </div>
       </div>
     );

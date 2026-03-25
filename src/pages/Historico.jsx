@@ -6,24 +6,24 @@ import { ptBR } from 'date-fns/locale';
 import { useToast } from '@/components/ui/use-toast';
 
 const typeConfig = {
-  queda: { label: 'Queda Detectada', icon: '💥', color: 'text-orange-400', bg: 'bg-orange-500/10 border-orange-500/20' },
-  panico: { label: 'Botão de Pânico', icon: '🆘', color: 'text-red-400', bg: 'bg-red-500/10 border-red-500/20' },
-  imobilidade: { label: 'Imobilidade', icon: '⏱️', color: 'text-yellow-400', bg: 'bg-yellow-500/10 border-yellow-500/20' },
-  rota_desviada: { label: 'Rota Desviada', icon: '🗺️', color: 'text-cyan-400', bg: 'bg-cyan-500/10 border-cyan-500/20' },
-  manual: { label: 'Pânico Manual', icon: '🆘', color: 'text-red-400', bg: 'bg-red-500/10 border-red-500/20' },
+  queda: { label: 'Queda Detectada', icon: '💥', color: 'text-amber-600', bg: 'bg-amber-50 border-amber-200' },
+  panico: { label: 'Botão de Pânico', icon: '🆘', color: 'text-red-600', bg: 'bg-red-50 border-red-200' },
+  imobilidade: { label: 'Imobilidade', icon: '⏱️', color: 'text-amber-600', bg: 'bg-amber-50 border-amber-200' },
+  rota_desviada: { label: 'Rota Desviada', icon: '🗺️', color: 'text-blue-600', bg: 'bg-blue-50 border-blue-200' },
+  manual: { label: 'Pânico Manual', icon: '🆘', color: 'text-red-600', bg: 'bg-red-50 border-red-200' },
 };
 
 const severityBadge = {
-  baixo: 'bg-green-500/20 text-green-400',
-  medio: 'bg-yellow-500/20 text-yellow-400',
-  alto: 'bg-orange-500/20 text-orange-400',
-  critico: 'bg-red-500/20 text-red-400',
+  baixo: 'bg-blue-50 text-blue-600',
+  medio: 'bg-amber-50 text-amber-600',
+  alto: 'bg-orange-50 text-orange-600',
+  critico: 'bg-red-50 text-red-600',
 };
 
 const statusBadge = {
-  ativo: 'bg-red-500/20 text-red-400',
-  resolvido: 'bg-green-500/20 text-green-400',
-  falso_positivo: 'bg-gray-500/20 text-gray-400',
+  ativo: 'bg-red-50 text-red-600',
+  resolvido: 'bg-blue-50 text-blue-600',
+  falso_positivo: 'bg-gray-100 text-gray-500',
 };
 
 const statusLabel = {
@@ -58,10 +58,10 @@ export default function Historico() {
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center gap-3 mb-1">
-          <div className="w-8 h-8 rounded-xl bg-orange-500/20 flex items-center justify-center">
-            <Clock size={16} className="text-orange-400" />
+          <div className="w-8 h-8 rounded-xl bg-red-50 flex items-center justify-center">
+            <Clock size={16} className="text-red-600" />
           </div>
-          <p className="text-orange-400 text-sm font-semibold uppercase tracking-widest">Registro</p>
+          <p className="text-red-600 text-sm font-semibold uppercase tracking-widest">Registro</p>
         </div>
         <h1 className="text-foreground text-3xl font-black">Histórico</h1>
       </div>
@@ -73,11 +73,11 @@ export default function Historico() {
           <p className="text-muted-foreground text-xs mt-0.5">Total</p>
         </div>
         <div className="glass-card rounded-2xl p-3 text-center">
-          <p className="text-2xl font-black text-red-400">{activeCount}</p>
+          <p className="text-2xl font-black text-red-600">{activeCount}</p>
           <p className="text-muted-foreground text-xs mt-0.5">Ativos</p>
         </div>
         <div className="glass-card rounded-2xl p-3 text-center">
-          <p className="text-2xl font-black text-green-400">{resolvedCount}</p>
+          <p className="text-2xl font-black text-blue-600">{resolvedCount}</p>
           <p className="text-muted-foreground text-xs mt-0.5">Resolvidos</p>
         </div>
       </div>
@@ -86,7 +86,7 @@ export default function Historico() {
       {isLoading ? (
         <div className="space-y-3">
           {[1, 2, 3, 4].map(i => (
-            <div key={i} className="h-24 rounded-2xl bg-secondary/40 animate-pulse" />
+            <div key={i} className="h-24 rounded-2xl bg-gray-100 animate-pulse" />
           ))}
         </div>
       ) : alerts.length === 0 ? (
@@ -100,7 +100,7 @@ export default function Historico() {
           {alerts.map(alert => {
             const tc = typeConfig[alert.type] || typeConfig.manual;
             return (
-              <div key={alert.id} className={`glass-card rounded-2xl p-4 border slide-up`}>
+              <div key={alert.id} className="glass-card rounded-2xl p-4 border border-gray-100 slide-up">
                 <div className="flex items-start gap-3">
                   <div className={`w-10 h-10 rounded-2xl flex items-center justify-center text-lg flex-shrink-0 ${tc.bg} border`}>
                     {tc.icon}
@@ -108,7 +108,7 @@ export default function Historico() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <p className={`font-bold text-sm ${tc.color}`}>{tc.label}</p>
-                      <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${severityBadge[alert.severity] || 'bg-gray-500/20 text-gray-400'}`}>
+                      <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${severityBadge[alert.severity] || 'bg-gray-100 text-gray-500'}`}>
                         {alert.severity}
                       </span>
                       <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${statusBadge[alert.status] || ''}`}>
@@ -131,9 +131,9 @@ export default function Historico() {
 
                     {alert.risk_score && (
                       <div className="mt-2 flex items-center gap-2">
-                        <div className="flex-1 h-1.5 rounded-full bg-secondary overflow-hidden">
+                        <div className="flex-1 h-1.5 rounded-full bg-gray-100 overflow-hidden">
                           <div
-                            className="h-full rounded-full bg-gradient-to-r from-yellow-500 to-red-500 transition-all"
+                            className="h-full rounded-full bg-gradient-to-r from-amber-400 to-red-500 transition-all"
                             style={{ width: `${alert.risk_score}%` }}
                           />
                         </div>
@@ -149,9 +149,9 @@ export default function Historico() {
                     <button
                       onClick={() => resolveMutation.mutate(alert.id)}
                       aria-label="Marcar como resolvido"
-                      className="w-8 h-8 rounded-xl bg-green-500/10 hover:bg-green-500/20 flex items-center justify-center transition-colors cursor-pointer flex-shrink-0"
+                      className="w-8 h-8 rounded-xl bg-blue-50 hover:bg-blue-100 flex items-center justify-center transition-colors cursor-pointer flex-shrink-0"
                     >
-                      <CheckCircle size={15} className="text-green-400" />
+                      <CheckCircle size={15} className="text-blue-600" />
                     </button>
                   )}
                 </div>

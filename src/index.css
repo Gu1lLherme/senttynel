@@ -6,35 +6,26 @@
 
 @layer base {
   :root {
-    --background: 222 47% 6%;
-    --foreground: 210 40% 98%;
-    --card: 222 40% 10%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222 40% 10%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 340 82% 60%;
+    --background: 210 25% 97%;
+    --foreground: 215 25% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 215 25% 15%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 25% 15%;
+    --primary: 210 90% 52%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 222 35% 15%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 222 35% 15%;
-    --muted-foreground: 215 20% 55%;
-    --accent: 195 100% 50%;
-    --accent-foreground: 222 47% 6%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 222 30% 18%;
-    --input: 222 30% 18%;
-    --ring: 340 82% 60%;
+    --secondary: 210 20% 93%;
+    --secondary-foreground: 215 25% 25%;
+    --muted: 210 15% 92%;
+    --muted-foreground: 215 15% 50%;
+    --accent: 0 85% 58%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 85% 58%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 210 20% 88%;
+    --input: 210 20% 88%;
+    --ring: 210 90% 52%;
     --radius: 1rem;
-
-    --neon-red: #FF2D55;
-    --neon-cyan: #00F5FF;
-    --neon-green: #00FF87;
-    --neon-purple: #BF5FFF;
-    --neon-orange: #FF9500;
-    --safe-green: #00C896;
-    --danger-red: #FF2D55;
-    --warning-orange: #FF9500;
   }
 }
 
@@ -44,32 +35,25 @@
   }
 
   body {
-    @apply bg-background text-foreground font-inter;
+    @apply bg-background text-foreground;
     font-family: 'Inter', sans-serif;
   }
 }
 
 @layer utilities {
   .glow-red {
-    box-shadow: 0 0 20px rgba(255, 45, 85, 0.5), 0 0 60px rgba(255, 45, 85, 0.3);
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.3), 0 0 60px rgba(220, 38, 38, 0.15);
   }
 
-  .glow-cyan {
-    box-shadow: 0 0 20px rgba(0, 245, 255, 0.4), 0 0 60px rgba(0, 245, 255, 0.2);
-  }
-
-  .glow-green {
-    box-shadow: 0 0 20px rgba(0, 255, 135, 0.4), 0 0 60px rgba(0, 255, 135, 0.2);
-  }
-
-  .glow-purple {
-    box-shadow: 0 0 20px rgba(191, 95, 255, 0.4), 0 0 60px rgba(191, 95, 255, 0.2);
+  .glow-blue {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), 0 0 60px rgba(59, 130, 246, 0.15);
   }
 
   .glass-card {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   }
 
   .sos-pulse {
@@ -77,17 +61,8 @@
   }
 
   @keyframes sosPulse {
-    0%, 100% { box-shadow: 0 0 30px rgba(255, 45, 85, 0.6), 0 0 80px rgba(255, 45, 85, 0.3); }
-    50% { box-shadow: 0 0 50px rgba(255, 45, 85, 0.9), 0 0 120px rgba(255, 45, 85, 0.5); }
-  }
-
-  .sensor-pulse {
-    animation: sensorPulse 3s ease-in-out infinite;
-  }
-
-  @keyframes sensorPulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
+    0%, 100% { box-shadow: 0 0 20px rgba(220, 38, 38, 0.4), 0 0 60px rgba(220, 38, 38, 0.2); }
+    50% { box-shadow: 0 0 40px rgba(220, 38, 38, 0.7), 0 0 100px rgba(220, 38, 38, 0.35); }
   }
 
   .slide-up {

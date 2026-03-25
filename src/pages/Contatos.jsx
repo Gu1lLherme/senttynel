@@ -17,7 +17,7 @@ const relationshipLabels = {
   outro: 'Outro'
 };
 
-const avatarColors = ['#FF2D55', '#BF5FFF', '#00F5FF', '#00FF87', '#FF9500', '#5856D6'];
+const avatarColors = ['#3B82F6', '#DC2626', '#2563EB', '#1D4ED8', '#EF4444', '#60A5FA'];
 
 export default function Contatos() {
   const [open, setOpen] = useState(false);
@@ -64,10 +64,10 @@ export default function Contatos() {
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center gap-3 mb-1">
-          <div className="w-8 h-8 rounded-xl bg-purple-500/20 flex items-center justify-center">
-            <Shield size={16} className="text-purple-400" />
+          <div className="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center">
+            <Shield size={16} className="text-blue-600" />
           </div>
-          <p className="text-purple-400 text-sm font-semibold uppercase tracking-widest">Rede de Proteção</p>
+          <p className="text-blue-600 text-sm font-semibold uppercase tracking-widest">Rede de Proteção</p>
         </div>
         <h1 className="text-foreground text-3xl font-black">Contatos</h1>
         <p className="text-muted-foreground text-sm mt-1">
@@ -76,9 +76,9 @@ export default function Contatos() {
       </div>
 
       {/* Info Banner */}
-      <div className="mb-5 p-3 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center gap-3">
-        <Star size={16} className="text-purple-400 flex-shrink-0" />
-        <p className="text-purple-300 text-xs">
+      <div className="mb-5 p-3 rounded-2xl bg-blue-50 border border-blue-100 flex items-center gap-3">
+        <Star size={16} className="text-blue-600 flex-shrink-0" />
+        <p className="text-blue-700 text-xs">
           Até 5 contatos são notificados em ordem de prioridade durante um alerta SOS.
         </p>
       </div>
@@ -86,10 +86,10 @@ export default function Contatos() {
       {/* Add button */}
       <button
         onClick={() => setOpen(true)}
-        className="w-full mb-5 p-4 rounded-2xl border-2 border-dashed border-white/20 flex items-center justify-center gap-2 hover:border-primary/50 hover:bg-primary/5 transition-all duration-200 cursor-pointer group"
+        className="w-full mb-5 p-4 rounded-2xl border-2 border-dashed border-gray-300 flex items-center justify-center gap-2 hover:border-blue-400 hover:bg-blue-50/50 transition-all duration-200 cursor-pointer group"
       >
-        <Plus size={18} className="text-muted-foreground group-hover:text-primary transition-colors" />
-        <span className="text-muted-foreground group-hover:text-primary text-sm font-semibold transition-colors">
+        <Plus size={18} className="text-gray-400 group-hover:text-blue-600 transition-colors" />
+        <span className="text-gray-400 group-hover:text-blue-600 text-sm font-semibold transition-colors">
           Adicionar contato de confiança
         </span>
       </button>
@@ -98,7 +98,7 @@ export default function Contatos() {
       {isLoading ? (
         <div className="space-y-3">
           {[1, 2, 3].map(i => (
-            <div key={i} className="h-20 rounded-2xl bg-secondary/40 animate-pulse" />
+            <div key={i} className="h-20 rounded-2xl bg-gray-100 animate-pulse" />
           ))}
         </div>
       ) : contacts.length === 0 ? (
@@ -129,7 +129,7 @@ export default function Contatos() {
                 <div className="flex items-center gap-2">
                   <p className="text-foreground font-bold text-base truncate">{contact.name}</p>
                   {index === 0 && (
-                    <span className="flex-shrink-0 px-2 py-0.5 rounded-full bg-primary/20 text-primary text-xs font-semibold">
+                    <span className="flex-shrink-0 px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold">
                       1º
                     </span>
                   )}
@@ -151,12 +151,12 @@ export default function Contatos() {
                 <AlertDialogTrigger asChild>
                   <button
                     aria-label={`Remover ${contact.name}`}
-                    className="w-9 h-9 rounded-xl bg-red-500/10 hover:bg-red-500/20 flex items-center justify-center transition-colors cursor-pointer flex-shrink-0"
+                    className="w-9 h-9 rounded-xl bg-red-50 hover:bg-red-100 flex items-center justify-center transition-colors cursor-pointer flex-shrink-0"
                   >
-                    <Trash2 size={15} className="text-red-400" />
+                    <Trash2 size={15} className="text-red-500" />
                   </button>
                 </AlertDialogTrigger>
-                <AlertDialogContent className="bg-card border-border max-w-sm mx-auto">
+                <AlertDialogContent className="bg-white border-gray-200 max-w-sm mx-auto">
                   <AlertDialogHeader>
                     <AlertDialogTitle>Remover contato?</AlertDialogTitle>
                     <AlertDialogDescription>
@@ -167,7 +167,7 @@ export default function Contatos() {
                     <AlertDialogCancel>Cancelar</AlertDialogCancel>
                     <AlertDialogAction
                       onClick={() => deleteMutation.mutate(contact.id)}
-                      className="bg-destructive text-destructive-foreground"
+                      className="bg-red-600 text-white hover:bg-red-700"
                     >
                       Remover
                     </AlertDialogAction>
@@ -181,7 +181,7 @@ export default function Contatos() {
 
       {/* Add Contact Dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="bg-card border-border max-w-sm mx-auto rounded-3xl">
+        <DialogContent className="bg-white border-gray-200 max-w-sm mx-auto rounded-3xl">
           <DialogHeader>
             <DialogTitle className="text-foreground text-xl font-black">Novo Contato</DialogTitle>
           </DialogHeader>
@@ -193,7 +193,7 @@ export default function Contatos() {
                 placeholder="Ex: Maria Silva"
                 value={form.name}
                 onChange={e => setForm({ ...form, name: e.target.value })}
-                className="bg-secondary/50 border-border rounded-xl"
+                className="bg-gray-50 border-gray-200 rounded-xl"
                 required
               />
             </div>
@@ -204,7 +204,7 @@ export default function Contatos() {
                 placeholder="+55 11 99999-9999"
                 value={form.phone}
                 onChange={e => setForm({ ...form, phone: e.target.value })}
-                className="bg-secondary/50 border-border rounded-xl"
+                className="bg-gray-50 border-gray-200 rounded-xl"
                 type="tel"
                 required
               />
@@ -212,10 +212,10 @@ export default function Contatos() {
             <div className="space-y-1.5">
               <Label className="text-muted-foreground text-sm">Relacionamento</Label>
               <Select value={form.relationship} onValueChange={v => setForm({ ...form, relationship: v })}>
-                <SelectTrigger className="bg-secondary/50 border-border rounded-xl">
+                <SelectTrigger className="bg-gray-50 border-gray-200 rounded-xl">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-card border-border">
+                <SelectContent className="bg-white border-gray-200">
                   {Object.entries(relationshipLabels).map(([k, v]) => (
                     <SelectItem key={k} value={k}>{v}</SelectItem>
                   ))}
@@ -225,7 +225,7 @@ export default function Contatos() {
             <button
               type="submit"
               disabled={createMutation.isPending}
-              className="w-full py-3 rounded-2xl bg-primary text-primary-foreground font-bold text-base hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-50"
+              className="w-full py-3 rounded-2xl bg-blue-600 text-white font-bold text-base hover:bg-blue-700 transition-colors cursor-pointer disabled:opacity-50"
             >
               {createMutation.isPending ? 'Salvando…' : 'Adicionar Contato'}
             </button>
