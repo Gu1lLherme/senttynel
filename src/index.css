@@ -6,7 +6,7 @@
 
 @layer base {
   :root {
-    --background: 210 25% 97%;
+    --background: 214 100% 97%;
     --foreground: 215 25% 15%;
     --card: 0 0% 100%;
     --card-foreground: 215 25% 15%;
@@ -50,10 +50,10 @@
   }
 
   .glass-card {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(59, 130, 246, 0.08);
+    box-shadow: 0 2px 12px rgba(59, 130, 246, 0.06);
   }
 
   .sos-pulse {

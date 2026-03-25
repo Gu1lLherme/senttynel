@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
-import { MapPin, Zap, Clock, Home as HomeIcon } from 'lucide-react';
+import { Zap } from 'lucide-react';
 import StatusBadge from '@/components/sentinel/StatusBadge';
-import SensorCard from '@/components/sentinel/SensorCard';
 import SOSButton from '@/components/sentinel/SOSButton';
 import SOSModal from '@/components/sentinel/SOSModal';
-import { Link } from 'react-router-dom';
 
 export default function Home() {
   const [user, setUser] = useState(null);
@@ -31,9 +29,9 @@ export default function Home() {
 
   const hour = currentTime.getHours();
   const greeting =
-  hour < 12 ? 'Bom Dia' :
-  hour < 18 ? 'Boa Tarde' :
-  'Boa Noite';
+    hour < 12 ? 'Bom Dia' :
+    hour < 18 ? 'Boa Tarde' :
+    'Boa Noite';
 
   const hasActiveAlert = alerts.length > 0;
   const status = hasActiveAlert ? 'perigo' : 'segura';
@@ -65,100 +63,47 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-background px-5 pt-14 pb-4">
+    <div className="min-h-screen bg-background px-5 pt-14 pb-4 flex flex-col">
       {/* Header */}
-      <div className="mb-6 slide-up">
-        <p className="text-primary text-sm font-semibold uppercase tracking-widest mb-1">
+      <div className="mb-4 slide-up">
+        <p className="text-blue-500 text-sm font-semibold uppercase tracking-widest mb-1">
           {greeting}
         </p>
         <h1 className="text-foreground text-3xl font-black">
           {user?.full_name?.split(' ')[0] || 'Usuário'}
         </h1>
-
-        {/* Status row */}
-        <div className="flex items-center gap-3 mt-3 flex-wrap">
+        <div className="mt-3">
           <StatusBadge status={status} />
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary/60 border border-white/10 text-sm font-semibold text-muted-foreground">
-            <HomeIcon size={13} />
-            Casa
-          </div>
-          
-
-
-          
         </div>
       </div>
 
       {/* Active Alert Banner */}
-      {hasActiveAlert &&
-      <div className="mb-4 p-3 rounded-2xl bg-red-500/15 border border-red-500/40 flex items-center gap-3 slide-up">
-          <div className="w-8 h-8 rounded-full bg-red-500/30 flex items-center justify-center flex-shrink-0">
-            <Zap size={16} className="text-red-400" />
+      {hasActiveAlert && (
+        <div className="mb-4 p-3 rounded-2xl bg-red-50 border border-red-200 flex items-center gap-3 slide-up">
+          <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
+            <Zap size={16} className="text-red-600" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-red-400 font-bold text-sm">Alerta Ativo</p>
-            <p className="text-red-300/70 text-xs truncate">
+            <p className="text-red-600 font-bold text-sm">Alerta Ativo</p>
+            <p className="text-red-400 text-xs truncate">
               {alerts[0]?.type === 'manual' ? 'Pânico acionado' : alerts[0]?.type} — contatos notificados
             </p>
           </div>
         </div>
-      }
+      )}
 
-      {/* Sensor Cards */}
-      <div className="grid grid-cols-2 gap-3 mb-6">
-        <SensorCard
-          icon="📍"
-          label="Localização"
-          value="GPS ativo"
-          color="cyan"
-          active={true} />
-        
-        <SensorCard
-          icon="⚡"
-          label="Movimento"
-          value="Estável"
-          color="green"
-          active={true} />
-        
-      </div>
-
-      {/* SOS Button */}
-      <div className="flex justify-center mb-6">
+      {/* SOS Button — centered */}
+      <div className="flex-1 flex items-center justify-center">
         <SOSButton onActivate={handleSOSActivate} />
       </div>
 
-      {/* Quick Actions */}
-      <div className="grid grid-cols-3 gap-3">
-        <Link to="/contatos">
-          <div className="glass-card rounded-2xl p-4 flex flex-col items-center gap-2 cursor-pointer hover:bg-white/10 transition-all duration-200 active:scale-95">
-            <div className="w-10 h-10 rounded-xl bg-purple-500/15 flex items-center justify-center text-xl">👥</div>
-            <p className="text-foreground text-xs font-semibold text-center">Contatos</p>
-            <p className="text-muted-foreground text-xs text-center">{contacts.length} ativos</p>
-          </div>
-        </Link>
-        <Link to="/configuracoes">
-          <div className="glass-card rounded-2xl p-4 flex flex-col items-center gap-2 cursor-pointer hover:bg-white/10 transition-all duration-200 active:scale-95">
-            <div className="w-10 h-10 rounded-xl bg-cyan-500/15 flex items-center justify-center text-xl">⚙️</div>
-            <p className="text-foreground text-xs font-semibold text-center">Config</p>
-            <p className="text-muted-foreground text-xs text-center">Zonas seguras</p>
-          </div>
-        </Link>
-        <Link to="/historico">
-          <div className="glass-card rounded-2xl p-4 flex flex-col items-center gap-2 cursor-pointer hover:bg-white/10 transition-all duration-200 active:scale-95">
-            <div className="w-10 h-10 rounded-xl bg-orange-500/15 flex items-center justify-center text-xl">📋</div>
-            <p className="text-foreground text-xs font-semibold text-center">Histórico</p>
-            <p className="text-muted-foreground text-xs text-center">Ver registros</p>
-          </div>
-        </Link>
-      </div>
-
       {/* SOS Modal */}
-      {sosActive &&
-      <SOSModal
-        contacts={contacts}
-        onClose={handleSOSClose} />
-
-      }
-    </div>);
-
+      {sosActive && (
+        <SOSModal
+          contacts={contacts}
+          onClose={handleSOSClose}
+        />
+      )}
+    </div>
+  );
 }
