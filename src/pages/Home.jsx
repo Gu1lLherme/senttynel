@@ -11,7 +11,7 @@ export default function Home() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [running, setRunning] = useState(false);
   const [gpsActive, setGpsActive] = useState(false);
-  const [sosStep, setSosStep] = useState(0); // 0=idle, 1=first tap, 2=confirmed
+  const [sosStep, setSosStep] = useState(0);
 
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => {});
@@ -25,7 +25,6 @@ export default function Home() {
     return () => clearInterval(timer);
   }, []);
 
-  // Auto-reset SOS step after 4s
   useEffect(() => {
     if (sosStep === 1) {
       const t = setTimeout(() => setSosStep(0), 4000);
@@ -99,41 +98,41 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-background px-5 pt-14 pb-24">
+    <div className="h-[100dvh] bg-background px-5 pt-12 pb-20 flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="mb-5 slide-up">
-        <p className="text-blue-400 text-sm font-semibold uppercase tracking-widest mb-1">
+      <div className="flex-shrink-0">
+        <p className="text-blue-400 text-xs font-semibold uppercase tracking-widest mb-0.5">
           {greeting}
         </p>
-        <h1 className="text-foreground text-3xl font-black">
+        <h1 className="text-foreground text-2xl font-black leading-tight">
           {user?.full_name?.split(' ')[0] || 'Usuário'}
         </h1>
-        <div className="mt-2">
+        <div className="mt-1.5 flex items-center gap-2">
           <StatusBadge status={status} />
         </div>
       </div>
 
       {/* Active Alert Banner */}
       {hasActiveAlert && (
-        <div className="mb-5 p-3 rounded-2xl bg-red-50 border border-red-200 flex items-center gap-3 slide-up">
-          <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
-            <Zap size={16} className="text-red-600" />
+        <div className="flex-shrink-0 mt-3 p-2.5 rounded-xl bg-red-50 border border-red-200 flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
+            <Zap size={14} className="text-red-600" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-red-600 font-bold text-sm">Alerta Ativo</p>
+            <p className="text-red-600 font-bold text-xs">Alerta Ativo</p>
             <p className="text-red-400 text-xs truncate">
-              {alerts[0]?.type === 'manual' ? 'Pânico acionado' : alerts[0]?.type} — contatos notificados
+              {alerts[0]?.type === 'manual' ? 'Pânico acionado' : alerts[0]?.type}
             </p>
           </div>
         </div>
       )}
 
-      {/* SOS Square Button */}
-      <div className="flex justify-center mb-6 slide-up">
+      {/* SOS Button — fills available space */}
+      <div className="flex-1 flex items-center justify-center min-h-0">
         <button
           onClick={handleSOSTap}
           className={`
-            w-56 h-56 rounded-3xl flex flex-col items-center justify-center cursor-pointer select-none
+            aspect-square w-full max-w-[14rem] rounded-3xl flex flex-col items-center justify-center cursor-pointer select-none
             transition-all duration-200 active:scale-95
             ${sosStep === 1
               ? 'bg-gradient-to-br from-orange-500 to-red-600 animate-pulse'
@@ -147,60 +146,57 @@ export default function Home() {
           }}
         >
           <span className="text-white font-black text-4xl tracking-widest">SOS</span>
-          <span className="text-white/80 text-sm font-semibold mt-2">
+          <span className="text-white/80 text-xs font-semibold mt-1.5">
             {sosStep === 0 ? 'EMERGÊNCIA' : 'TOQUE PARA CONFIRMAR'}
           </span>
         </button>
       </div>
 
-      {/* GPS + Running buttons */}
-      <div className="grid grid-cols-2 gap-3 slide-up">
-        {/* GPS Toggle Button */}
+      {/* Bottom controls */}
+      <div className="flex-shrink-0 grid grid-cols-2 gap-3">
+        {/* GPS */}
         <button
           onClick={toggleGps}
-          className={`glass-card rounded-2xl p-4 flex flex-col items-center gap-2 cursor-pointer transition-all duration-200 active:scale-[0.97] ${
+          className={`glass-card rounded-2xl p-3 flex items-center gap-3 cursor-pointer transition-all duration-200 active:scale-[0.97] ${
             gpsActive ? 'ring-2 ring-blue-400' : ''
           }`}
         >
-          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${gpsActive ? 'bg-blue-500' : 'bg-gray-100'}`}>
-            <MapPin size={22} className={gpsActive ? 'text-white' : 'text-gray-400'} />
+          <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${gpsActive ? 'bg-blue-500' : 'bg-gray-100'}`}>
+            <MapPin size={20} className={gpsActive ? 'text-white' : 'text-gray-400'} />
           </div>
-          <p className="text-foreground font-semibold text-sm">GPS</p>
-          <div className={`px-3 py-1 rounded-full text-xs font-bold ${
-            gpsActive ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-400'
-          }`}>
-            {gpsActive ? 'ON' : 'OFF'}
+          <div className="flex-1 min-w-0 text-left">
+            <p className="text-foreground font-semibold text-sm">GPS</p>
+            <p className={`text-xs font-medium ${gpsActive ? 'text-blue-600' : 'text-gray-400'}`}>
+              {gpsActive ? 'Ativo' : 'Inativo'}
+            </p>
           </div>
         </button>
 
-        {/* Running Toggle Button */}
+        {/* Corrida */}
         <button
           onClick={() => setRunning(!running)}
-          className={`glass-card rounded-2xl p-4 flex flex-col items-center gap-2 cursor-pointer transition-all duration-200 active:scale-[0.97] ${
+          className={`glass-card rounded-2xl p-3 flex items-center gap-3 cursor-pointer transition-all duration-200 active:scale-[0.97] ${
             running ? 'ring-2 ring-blue-400' : ''
           }`}
         >
-          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${running ? 'bg-blue-500' : 'bg-gray-100'}`}>
+          <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${running ? 'bg-blue-500' : 'bg-gray-100'}`}>
             {running
-              ? <Square size={20} className="text-white" />
-              : <Play size={20} className="text-gray-400 ml-0.5" />
+              ? <Square size={18} className="text-white" />
+              : <Play size={18} className="text-gray-400 ml-0.5" />
             }
           </div>
-          <p className="text-foreground font-semibold text-sm">Corrida</p>
-          <div className={`px-3 py-1 rounded-full text-xs font-bold ${
-            running ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-400'
-          }`}>
-            {running ? 'ON' : 'OFF'}
+          <div className="flex-1 min-w-0 text-left">
+            <p className="text-foreground font-semibold text-sm">Corrida</p>
+            <p className={`text-xs font-medium ${running ? 'text-blue-600' : 'text-gray-400'}`}>
+              {running ? 'Ativo' : 'Inativo'}
+            </p>
           </div>
         </button>
       </div>
 
       {/* SOS Modal */}
       {sosActive && (
-        <SOSModal
-          contacts={contacts}
-          onClose={handleSOSClose}
-        />
+        <SOSModal contacts={contacts} onClose={handleSOSClose} />
       )}
     </div>
   );
