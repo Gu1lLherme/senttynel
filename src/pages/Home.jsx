@@ -132,7 +132,7 @@ export default function Home() {
         <button
           onClick={handleSOSTap}
           className={`
-            aspect-square w-full max-w-[12rem] rounded-3xl flex flex-col items-center justify-center cursor-pointer select-none
+            aspect-square w-full max-w-[16rem] rounded-3xl flex flex-col items-center justify-center cursor-pointer select-none
             transition-all duration-200 active:scale-95
             ${sosStep === 1
               ? 'bg-gradient-to-br from-orange-500 to-red-600 animate-pulse'
