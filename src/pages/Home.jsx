@@ -11,16 +11,11 @@ export default function Home() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [running, setRunning] = useState(false);
   const [gpsActive, setGpsActive] = useState(false);
-
-  // SOS hold state
-  const [pressing, setPressing] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [intervalId, setIntervalId] = useState(null);
+  const [sosStep, setSosStep] = useState(0); // 0=idle, 1=first tap, 2=confirmed
 
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => {});
     const timer = setInterval(() => setCurrentTime(new Date()), 60000);
-    // Check GPS
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         () => setGpsActive(true),
@@ -29,6 +24,14 @@ export default function Home() {
     }
     return () => clearInterval(timer);
   }, []);
+
+  // Auto-reset SOS step after 4s
+  useEffect(() => {
+    if (sosStep === 1) {
+      const t = setTimeout(() => setSosStep(0), 4000);
+      return () => clearTimeout(t);
+    }
+  }, [sosStep]);
 
   const { data: alerts = [] } = useQuery({
     queryKey: ['alerts-active'],
@@ -49,7 +52,16 @@ export default function Home() {
   const hasActiveAlert = alerts.length > 0;
   const status = hasActiveAlert ? 'perigo' : 'segura';
 
-  const handleSOSActivate = async () => {
+  const handleSOSTap = () => {
+    if (sosStep === 0) {
+      setSosStep(1);
+    } else if (sosStep === 1) {
+      setSosStep(0);
+      triggerSOS();
+    }
+  };
+
+  const triggerSOS = async () => {
     setSosActive(true);
     try {
       await base44.entities.Alert.create({
@@ -75,33 +87,21 @@ export default function Home() {
     }
   };
 
-  // SOS press handlers
-  const startPress = () => {
-    setPressing(true);
-    let p = 0;
-    const id = setInterval(() => {
-      p += 4;
-      setProgress(p);
-      if (p >= 100) {
-        clearInterval(id);
-        setPressing(false);
-        setProgress(0);
-        handleSOSActivate();
-      }
-    }, 100);
-    setIntervalId(id);
-  };
-
-  const cancelPress = () => {
-    if (intervalId) clearInterval(intervalId);
-    setPressing(false);
-    setProgress(0);
+  const toggleGps = () => {
+    if (!gpsActive && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        () => setGpsActive(true),
+        () => setGpsActive(false)
+      );
+    } else {
+      setGpsActive(!gpsActive);
+    }
   };
 
   return (
     <div className="min-h-screen bg-background px-5 pt-14 pb-24">
       {/* Header */}
-      <div className="mb-6 slide-up">
+      <div className="mb-5 slide-up">
         <p className="text-blue-400 text-sm font-semibold uppercase tracking-widest mb-1">
           {greeting}
         </p>
@@ -130,87 +130,64 @@ export default function Home() {
 
       {/* SOS Square Button */}
       <div className="flex justify-center mb-6 slide-up">
-        <div className="relative">
-          {/* Progress border overlay */}
-          {pressing && (
-            <div
-              className="absolute inset-0 rounded-3xl border-4 border-white/60 z-10 pointer-events-none"
-              style={{
-                background: `conic-gradient(rgba(255,255,255,0.4) ${progress * 3.6}deg, transparent ${progress * 3.6}deg)`,
-                mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-                maskComposite: 'exclude',
-                WebkitMaskComposite: 'xor',
-                padding: '4px',
-                borderRadius: '1.5rem',
-              }}
-            />
-          )}
-          <button
-            onMouseDown={startPress}
-            onMouseUp={cancelPress}
-            onMouseLeave={cancelPress}
-            onTouchStart={startPress}
-            onTouchEnd={cancelPress}
-            className={`
-              w-48 h-48 rounded-3xl bg-gradient-to-br from-red-500 to-red-700
-              flex flex-col items-center justify-center cursor-pointer select-none
-              transition-all duration-200 active:scale-95
-              ${pressing ? 'scale-95 brightness-110' : 'hover:brightness-105'}
-            `}
-            style={{
-              boxShadow: pressing
-                ? '0 0 0 6px rgba(220,38,38,0.2), 0 12px 40px rgba(220,38,38,0.5)'
-                : '0 0 0 4px rgba(220,38,38,0.1), 0 8px 30px rgba(220,38,38,0.3)'
-            }}
-          >
-            <span className="text-white font-black text-3xl tracking-widest">SOS</span>
-            <span className="text-white/70 text-xs font-semibold mt-1">
-              {pressing ? `${Math.round(progress)}%` : 'Segure 3s'}
-            </span>
-          </button>
-        </div>
+        <button
+          onClick={handleSOSTap}
+          className={`
+            w-56 h-56 rounded-3xl flex flex-col items-center justify-center cursor-pointer select-none
+            transition-all duration-200 active:scale-95
+            ${sosStep === 1
+              ? 'bg-gradient-to-br from-orange-500 to-red-600 animate-pulse'
+              : 'bg-gradient-to-br from-red-500 to-red-700 hover:brightness-105'
+            }
+          `}
+          style={{
+            boxShadow: sosStep === 1
+              ? '0 0 0 6px rgba(249,115,22,0.3), 0 12px 40px rgba(220,38,38,0.5)'
+              : '0 0 0 4px rgba(220,38,38,0.1), 0 8px 30px rgba(220,38,38,0.3)'
+          }}
+        >
+          <span className="text-white font-black text-4xl tracking-widest">SOS</span>
+          <span className="text-white/80 text-sm font-semibold mt-2">
+            {sosStep === 0 ? 'EMERGÊNCIA' : 'TOQUE PARA CONFIRMAR'}
+          </span>
+        </button>
       </div>
 
-      {/* GPS Status + Running Toggle */}
-      <div className="space-y-3 slide-up">
-        {/* GPS Status */}
-        <div className="glass-card rounded-2xl p-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${gpsActive ? 'bg-blue-50' : 'bg-gray-100'}`}>
-              <MapPin size={20} className={gpsActive ? 'text-blue-600' : 'text-gray-400'} />
-            </div>
-            <div>
-              <p className="text-foreground font-semibold text-sm">GPS</p>
-              <p className={`text-xs font-medium ${gpsActive ? 'text-blue-600' : 'text-gray-400'}`}>
-                {gpsActive ? 'Ativo' : 'Inativo'}
-              </p>
-            </div>
+      {/* GPS + Running buttons */}
+      <div className="grid grid-cols-2 gap-3 slide-up">
+        {/* GPS Toggle Button */}
+        <button
+          onClick={toggleGps}
+          className={`glass-card rounded-2xl p-4 flex flex-col items-center gap-2 cursor-pointer transition-all duration-200 active:scale-[0.97] ${
+            gpsActive ? 'ring-2 ring-blue-400' : ''
+          }`}
+        >
+          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${gpsActive ? 'bg-blue-500' : 'bg-gray-100'}`}>
+            <MapPin size={22} className={gpsActive ? 'text-white' : 'text-gray-400'} />
           </div>
-          <span className={`w-3 h-3 rounded-full ${gpsActive ? 'bg-blue-500 animate-pulse' : 'bg-gray-300'}`} />
-        </div>
+          <p className="text-foreground font-semibold text-sm">GPS</p>
+          <div className={`px-3 py-1 rounded-full text-xs font-bold ${
+            gpsActive ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-400'
+          }`}>
+            {gpsActive ? 'ON' : 'OFF'}
+          </div>
+        </button>
 
-        {/* Running Toggle */}
+        {/* Running Toggle Button */}
         <button
           onClick={() => setRunning(!running)}
-          className={`w-full glass-card rounded-2xl p-4 flex items-center justify-between cursor-pointer transition-all duration-200 active:scale-[0.98] ${
+          className={`glass-card rounded-2xl p-4 flex flex-col items-center gap-2 cursor-pointer transition-all duration-200 active:scale-[0.97] ${
             running ? 'ring-2 ring-blue-400' : ''
           }`}
         >
-          <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${running ? 'bg-blue-500' : 'bg-gray-100'}`}>
-              {running
-                ? <Square size={18} className="text-white" />
-                : <Play size={18} className="text-gray-400 ml-0.5" />
-              }
-            </div>
-            <div className="text-left">
-              <p className="text-foreground font-semibold text-sm">Modo Corrida</p>
-              <p className={`text-xs font-medium ${running ? 'text-blue-600' : 'text-gray-400'}`}>
-                {running ? 'Monitoramento ativo' : 'Toque para iniciar'}
-              </p>
-            </div>
+          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${running ? 'bg-blue-500' : 'bg-gray-100'}`}>
+            {running
+              ? <Square size={20} className="text-white" />
+              : <Play size={20} className="text-gray-400 ml-0.5" />
+            }
           </div>
-          <div className={`px-3 py-1.5 rounded-full text-xs font-bold ${
+          <p className="text-foreground font-semibold text-sm">Corrida</p>
+          <div className={`px-3 py-1 rounded-full text-xs font-bold ${
             running ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-400'
           }`}>
             {running ? 'ON' : 'OFF'}
