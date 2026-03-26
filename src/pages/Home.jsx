@@ -98,7 +98,7 @@ export default function Home() {
   };
 
   return (
-    <div className="h-[100dvh] bg-background px-5 pt-4 pb-20 flex flex-col overflow-hidden">
+    <div className="h-[100dvh] bg-background px-5 pt-3 pb-24 flex flex-col overflow-hidden">
       {/* Header */}
       <div className="flex-shrink-0">
         <p className="text-blue-400 text-xs font-semibold uppercase tracking-widest mb-0.5">
@@ -132,7 +132,7 @@ export default function Home() {
         <button
           onClick={handleSOSTap}
           className={`
-            aspect-square w-full max-w-[14rem] rounded-3xl flex flex-col items-center justify-center cursor-pointer select-none
+            aspect-square w-full max-w-[12rem] rounded-3xl flex flex-col items-center justify-center cursor-pointer select-none
             transition-all duration-200 active:scale-95
             ${sosStep === 1
               ? 'bg-gradient-to-br from-orange-500 to-red-600 animate-pulse'
