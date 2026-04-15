@@ -98,7 +98,7 @@ export default function Home() {
   };
 
   return (
-    <div className="h-[100dvh] bg-background px-5 pt-3 pb-24 flex flex-col overflow-hidden">
+    <div className="min-h-screen bg-background px-5 pt-3 pb-24 flex flex-col">
       {/* Header */}
       <div className="flex-shrink-0">
         <p className="text-blue-400 text-xs font-semibold uppercase tracking-widest mb-0.5">

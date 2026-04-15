@@ -37,16 +37,8 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Inter', sans-serif;
-    overflow: hidden;
-  }
-
-  /* Hide scrollbar globally */
-  *::-webkit-scrollbar {
-    display: none;
-  }
-  * {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
   }
 }
 

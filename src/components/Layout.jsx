@@ -14,7 +14,7 @@ export default function Layout() {
   return (
     <div className="min-h-screen bg-background flex flex-col max-w-sm mx-auto relative">
       {/* Main content */}
-      <main className="flex-1 pb-20 overflow-y-auto scrollbar-none">
+      <main className="flex-1 pb-20 overflow-y-auto">
         <Outlet />
       </main>
 
