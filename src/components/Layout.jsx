@@ -1,9 +1,10 @@
 import { Outlet, useLocation, Link } from 'react-router-dom';
-import { Home, Map, Users, Settings } from 'lucide-react';
+import { Home, Map, Users, Settings, Baby } from 'lucide-react';
 
 const navItems = [
   { path: '/', icon: Home, label: 'Home' },
   { path: '/mapa', icon: Map, label: 'Mapa' },
+  { path: '/familia', icon: Baby, label: 'Família' },
   { path: '/contatos', icon: Users, label: 'Contatos' },
   { path: '/configuracoes', icon: Settings, label: 'Config' },
 ];

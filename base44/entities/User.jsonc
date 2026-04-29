@@ -1,0 +1,52 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "role": {
+      "type": "string",
+      "enum": [
+        "admin",
+        "owner",
+        "user"
+      ],
+      "default": "user",
+      "description": "Permiss\u00e3o no sistema. owner = dono da empresa"
+    },
+    "account_type": {
+      "type": "string",
+      "enum": [
+        "adulto",
+        "crianca",
+        "responsavel"
+      ],
+      "default": "adulto",
+      "description": "Tipo de conta: adulto, crian\u00e7a (monitorada) ou respons\u00e1vel (monitora crian\u00e7as)"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Telefone do usu\u00e1rio"
+    },
+    "linked_parent_email": {
+      "type": "string",
+      "description": "Email do respons\u00e1vel (preenchido em contas tipo 'crianca')"
+    },
+    "battery_level": {
+      "type": "number",
+      "description": "N\u00edvel atual de bateria (0-100)"
+    },
+    "last_location_lat": {
+      "type": "number"
+    },
+    "last_location_lng": {
+      "type": "number"
+    },
+    "last_location_address": {
+      "type": "string"
+    },
+    "last_seen": {
+      "type": "string",
+      "format": "date-time",
+      "description": "\u00daltima atividade do dispositivo"
+    }
+  }
+}

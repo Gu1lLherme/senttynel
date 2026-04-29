@@ -11,6 +11,10 @@ import Mapa from '@/pages/Mapa';
 import Contatos from '@/pages/Contatos';
 import Configuracoes from '@/pages/Configuracoes';
 import Historico from '@/pages/Historico';
+import BemVindo from '@/pages/BemVindo';
+import Acesso from '@/pages/Acesso';
+import ControleParental from '@/pages/ControleParental';
+import AdminDashboard from '@/pages/AdminDashboard';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -40,10 +44,17 @@ const AuthenticatedApp = () => {
 
   return (
     <Routes>
+      {/* Standalone (no layout) */}
+      <Route path="/bem-vindo" element={<BemVindo />} />
+      <Route path="/acesso" element={<Acesso />} />
+      <Route path="/administrativo/dashboard" element={<AdminDashboard />} />
+
+      {/* App with bottom nav */}
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route path="/mapa" element={<Mapa />} />
         <Route path="/contatos" element={<Contatos />} />
+        <Route path="/familia" element={<ControleParental />} />
         <Route path="/configuracoes" element={<Configuracoes />} />
         <Route path="/historico" element={<Historico />} />
       </Route>

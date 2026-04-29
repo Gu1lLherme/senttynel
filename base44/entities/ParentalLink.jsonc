@@ -1,0 +1,55 @@
+{
+  "name": "ParentalLink",
+  "type": "object",
+  "properties": {
+    "parent_email": {
+      "type": "string",
+      "description": "Email do respons\u00e1vel"
+    },
+    "child_email": {
+      "type": "string",
+      "description": "Email da crian\u00e7a monitorada"
+    },
+    "child_name": {
+      "type": "string",
+      "description": "Nome da crian\u00e7a"
+    },
+    "child_age": {
+      "type": "integer",
+      "description": "Idade da crian\u00e7a"
+    },
+    "share_location": {
+      "type": "boolean",
+      "default": true,
+      "description": "Compartilhar localiza\u00e7\u00e3o em tempo real"
+    },
+    "share_battery": {
+      "type": "boolean",
+      "default": true,
+      "description": "Compartilhar n\u00edvel de bateria"
+    },
+    "share_alerts": {
+      "type": "boolean",
+      "default": true,
+      "description": "Notificar pai sobre alertas (queda, p\u00e2nico, etc.)"
+    },
+    "email_notifications": {
+      "type": "boolean",
+      "default": true,
+      "description": "Enviar notifica\u00e7\u00f5es por email"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pendente",
+        "ativo",
+        "pausado"
+      ],
+      "default": "ativo"
+    }
+  },
+  "required": [
+    "parent_email",
+    "child_email"
+  ]
+}
