@@ -1,0 +1,41 @@
+{
+  "name": "GeofenceEvent",
+  "type": "object",
+  "properties": {
+    "child_email": {
+      "type": "string",
+      "description": "Email da crian\u00e7a"
+    },
+    "child_name": {
+      "type": "string"
+    },
+    "zone_id": {
+      "type": "string",
+      "description": "ID da SafeZone"
+    },
+    "zone_name": {
+      "type": "string"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "enter",
+        "exit"
+      ]
+    },
+    "lat": {
+      "type": "number"
+    },
+    "lng": {
+      "type": "number"
+    },
+    "notified": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "event_type",
+    "zone_name"
+  ]
+}
