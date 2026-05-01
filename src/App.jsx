@@ -49,9 +49,12 @@ const AuthenticatedApp = () => {
       <Route path="/acesso" element={<Acesso />} />
       <Route path="/administrativo/dashboard" element={<AdminDashboard />} />
 
+      {/* Default landing → BemVindo */}
+      <Route path="/" element={<BemVindo />} />
+
       {/* App with bottom nav */}
       <Route element={<Layout />}>
-        <Route path="/" element={<Home />} />
+        <Route path="/app" element={<Home />} />
         <Route path="/mapa" element={<Mapa />} />
         <Route path="/contatos" element={<Contatos />} />
         <Route path="/familia" element={<ControleParental />} />

@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
-import { Mail, Lock, User as UserIcon, ArrowLeft, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, User as UserIcon, ArrowLeft, Eye, EyeOff, Loader2 } from 'lucide-react';
 import Logo from '@/components/sentinel/Logo';
+import { useToast } from '@/components/ui/use-toast';
 
 export default function Acesso() {
   const navigate = useNavigate();
@@ -11,35 +12,60 @@ export default function Acesso() {
   const [mode, setMode] = useState(initialMode);
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const [submitting, setSubmitting] = useState(false);
+  const { toast } = useToast();
 
-  const handleSubmit = (e) => {
+  // If already authenticated, skip login
+  useEffect(() => {
+    base44.auth.isAuthenticated().then(authed => {
+      if (authed) navigate('/app');
+    }).catch(() => {});
+  }, [navigate]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // MVP: redireciona para o login real do Base44
-    base44.auth.redirectToLogin('/');
+    if (!form.email || !form.password) {
+      toast({ title: 'Preencha email e senha', variant: 'destructive' });
+      return;
+    }
+    if (mode === 'signup' && !form.name) {
+      toast({ title: 'Informe seu nome', variant: 'destructive' });
+      return;
+    }
+    setSubmitting(true);
+    try {
+      // Save form data locally so we can complete the profile after Base44 login
+      sessionStorage.setItem('sentinel_pending_profile', JSON.stringify({
+        name: form.name, mode,
+      }));
+      // Redirects to Base44 login (transparent for the user)
+      base44.auth.redirectToLogin('/app');
+    } catch (err) {
+      toast({ title: 'Erro ao acessar', description: err.message, variant: 'destructive' });
+      setSubmitting(false);
+    }
   };
 
   const isSignup = mode === 'signup';
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-red-50 px-6 py-8 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-red-50 px-6 py-8 flex flex-col max-w-md mx-auto">
       {/* Background */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-blue-200/30 rounded-full blur-3xl -translate-y-1/3 translate-x-1/3" />
+      <div className="absolute top-0 right-0 w-64 h-64 bg-blue-200/30 rounded-full blur-3xl -translate-y-1/3 translate-x-1/3 pointer-events-none" />
 
       {/* Back */}
       <button
-        onClick={() => navigate('/bem-vindo')}
+        onClick={() => navigate('/')}
         className="relative flex items-center gap-1.5 text-muted-foreground text-sm font-medium mb-6 hover:text-foreground transition-colors"
       >
         <ArrowLeft size={16} />
         Voltar
       </button>
 
-      {/* Logo */}
       <div className="relative flex justify-center mb-6">
         <Logo size="lg" />
       </div>
 
-      {/* Mode tabs */}
       <div className="relative bg-gray-100 p-1 rounded-2xl flex mb-6">
         <button
           onClick={() => setMode('signup')}
@@ -59,7 +85,6 @@ export default function Acesso() {
         </button>
       </div>
 
-      {/* Form */}
       <form onSubmit={handleSubmit} className="relative space-y-4 flex-1">
         {isSignup && (
           <div>
@@ -118,18 +143,12 @@ export default function Acesso() {
           </div>
         </div>
 
-        {!isSignup && (
-          <div className="text-right">
-            <button type="button" className="text-xs font-semibold text-blue-600 hover:underline">
-              Esqueceu a senha?
-            </button>
-          </div>
-        )}
-
         <button
           type="submit"
-          className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold text-base shadow-lg shadow-blue-500/30 hover:opacity-95 active:scale-[0.98] transition-all mt-2"
+          disabled={submitting}
+          className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold text-base shadow-lg shadow-blue-500/30 hover:opacity-95 active:scale-[0.98] transition-all mt-2 flex items-center justify-center gap-2 disabled:opacity-60"
         >
+          {submitting && <Loader2 size={18} className="animate-spin" />}
           {isSignup ? 'Criar minha conta' : 'Entrar no SENTINEL'}
         </button>
 
@@ -142,7 +161,7 @@ export default function Acesso() {
 
       <div className="relative pt-4 border-t border-gray-200 mt-6">
         <p className="text-center text-xs text-muted-foreground">
-          🛡️ MVP — Layout de demonstração
+          🔐 Suas credenciais são protegidas por criptografia
         </p>
       </div>
     </div>

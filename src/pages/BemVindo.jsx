@@ -52,7 +52,7 @@ export default function BemVindo() {
       {/* CTA buttons */}
       <div className="relative flex-shrink-0 space-y-3">
         <button
-          onClick={() => navigate('/acesso')}
+          onClick={() => navigate('/acesso?mode=signup')}
           className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold text-base flex items-center justify-center gap-2 shadow-lg shadow-blue-500/30 hover:opacity-95 active:scale-[0.98] transition-all"
         >
           Começar agora

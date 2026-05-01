@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Plus, Trash2, Baby, MapPin, Battery, BellRing, Shield, Mail, Smartphone } from 'lucide-react';
+import { Plus, Trash2, Baby, MapPin, Battery, BellRing, Shield, Mail, Smartphone, FileText, Loader2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -15,8 +15,33 @@ import {
 export default function ControleParental() {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ child_name: '', child_email: '', child_age: 10 });
+  const [downloadingId, setDownloadingId] = useState(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
+  const handleDownloadPdf = async (link) => {
+    setDownloadingId(link.id);
+    try {
+      const now = new Date();
+      const res = await base44.functions.invoke('generateMonthlyReport', {
+        child_email: link.child_email,
+        year: now.getFullYear(),
+        month: now.getMonth(),
+      }, { responseType: 'blob' });
+      const blob = new Blob([res.data], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `sentinel-${link.child_name}-${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast({ title: 'Relatório baixado', description: `Resumo mensal de ${link.child_name}` });
+    } catch (err) {
+      toast({ title: 'Erro ao gerar PDF', description: err.message, variant: 'destructive' });
+    } finally {
+      setDownloadingId(null);
+    }
+  };
 
   const { data: links = [], isLoading } = useQuery({
     queryKey: ['parental-links'],
@@ -197,6 +222,20 @@ export default function ControleParental() {
                   </div>
                 </div>
               )}
+
+              {/* PDF Report Button */}
+              <button
+                onClick={() => handleDownloadPdf(link)}
+                disabled={downloadingId === link.id}
+                className="w-full mb-3 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-bold flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.98] transition-all disabled:opacity-60"
+              >
+                {downloadingId === link.id ? (
+                  <Loader2 size={14} className="animate-spin" />
+                ) : (
+                  <FileText size={14} />
+                )}
+                {downloadingId === link.id ? 'Gerando relatório…' : 'Baixar relatório mensal (PDF)'}
+              </button>
 
               {/* Permissions */}
               <div className="space-y-2 pt-3 border-t border-gray-100">

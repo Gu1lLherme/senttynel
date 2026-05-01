@@ -76,3 +76,19 @@
     to { transform: translateY(0); opacity: 1; }
   }
 }
+
+/* Leaflet z-index fixes */
+.leaflet-container {
+  font-family: 'Inter', sans-serif;
+  z-index: 0;
+}
+.leaflet-popup-content-wrapper {
+  border-radius: 12px;
+}
+.leaflet-control-attribution {
+  display: none;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.5); opacity: 0.2; }
+}

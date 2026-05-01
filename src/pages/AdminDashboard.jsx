@@ -4,8 +4,9 @@ import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import {
   Users, AlertTriangle, ShieldCheck, TrendingUp, Activity,
-  Baby, Clock, Download, ArrowLeft, Lock
+  Baby, Clock, Download, ArrowLeft, Lock, Loader2
 } from 'lucide-react';
+import { useToast } from '@/components/ui/use-toast';
 import { format, startOfMonth, eachDayOfInterval, endOfMonth } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import StatCard from '@/components/admin/StatCard';
@@ -15,8 +16,33 @@ import Logo from '@/components/sentinel/Logo';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [me, setMe] = useState(null);
   const [authChecked, setAuthChecked] = useState(false);
+  const [downloadingPdf, setDownloadingPdf] = useState(false);
+
+  const handleDownloadReport = async () => {
+    setDownloadingPdf(true);
+    try {
+      const now = new Date();
+      const res = await base44.functions.invoke('generateMonthlyReport', {
+        year: now.getFullYear(),
+        month: now.getMonth(),
+      }, { responseType: 'blob' });
+      const blob = new Blob([res.data], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `sentinel-relatorio-${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast({ title: 'Relatório gerado com sucesso' });
+    } catch (err) {
+      toast({ title: 'Erro ao gerar relatório', description: err.message, variant: 'destructive' });
+    } finally {
+      setDownloadingPdf(false);
+    }
+  };
 
   useEffect(() => {
     base44.auth.me()
@@ -137,9 +163,13 @@ export default function AdminDashboard() {
             <span className="hidden sm:block text-xs px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 font-semibold border border-blue-100 capitalize">
               {me.role}
             </span>
-            <button className="px-3 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold flex items-center gap-1.5 hover:bg-blue-700 transition-colors">
-              <Download size={13} />
-              <span className="hidden sm:inline">Relatório mensal</span>
+            <button
+              onClick={handleDownloadReport}
+              disabled={downloadingPdf}
+              className="px-3 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold flex items-center gap-1.5 hover:bg-blue-700 transition-colors disabled:opacity-60"
+            >
+              {downloadingPdf ? <Loader2 size={13} className="animate-spin" /> : <Download size={13} />}
+              <span className="hidden sm:inline">{downloadingPdf ? 'Gerando…' : 'Relatório PDF'}</span>
             </button>
           </div>
         </div>
@@ -147,21 +177,28 @@ export default function AdminDashboard() {
 
       <div className="max-w-6xl mx-auto px-5 py-6 space-y-5">
         {/* Hero */}
-        <div className="glass-card rounded-3xl p-5 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 border-0 text-white">
+        <div
+          className="rounded-3xl p-5 text-white shadow-xl"
+          style={{
+            background: 'linear-gradient(135deg, #1e40af 0%, #1d4ed8 50%, #1e3a8a 100%)',
+          }}
+        >
           <div className="flex items-start justify-between flex-wrap gap-4">
             <div>
-              <p className="text-blue-200 text-xs font-semibold uppercase tracking-widest mb-1">
+              <p className="text-cyan-200 text-xs font-bold uppercase tracking-widest mb-1.5">
                 Visão geral · {format(now, "MMMM 'de' yyyy", { locale: ptBR })}
               </p>
-              <h2 className="text-white text-2xl sm:text-3xl font-black">Olá, {me.full_name?.split(' ')[0]}</h2>
-              <p className="text-blue-100 text-sm mt-1">
+              <h2 className="text-white text-2xl sm:text-3xl font-black drop-shadow">
+                Olá, {me.full_name?.split(' ')[0] || 'Admin'}
+              </h2>
+              <p className="text-white/90 text-sm mt-1.5 font-medium">
                 {monthAlerts.length} alertas registrados este mês · {users.length} usuários ativos
               </p>
             </div>
             <div className="flex items-center gap-2">
-              <div className="text-center px-4 py-2 rounded-2xl bg-white/15 backdrop-blur-sm">
-                <p className="text-3xl font-black">{responseRate}%</p>
-                <p className="text-blue-100 text-[10px] font-semibold uppercase tracking-wider">Resolução</p>
+              <div className="text-center px-4 py-2.5 rounded-2xl bg-white/20 backdrop-blur-sm border border-white/20">
+                <p className="text-3xl font-black text-white">{responseRate}%</p>
+                <p className="text-white/90 text-[10px] font-bold uppercase tracking-wider">Resolução</p>
               </div>
             </div>
           </div>
