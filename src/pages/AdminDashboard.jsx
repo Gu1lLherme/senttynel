@@ -27,7 +27,7 @@ export default function AdminDashboard() {
       .catch(() => setAuthChecked(true));
   }, []);
 
-  const isAuthorized = me && (me.role === 'admin' || me.role === 'owner');
+  const isAuthorized = !!(me && (me.role === 'admin' || me.role === 'owner'));
 
   const { data: users = [] } = useQuery({
     queryKey: ['admin-users'],
