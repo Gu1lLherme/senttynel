@@ -36,7 +36,8 @@ export default function Home() {
 
   const { data: alerts = [] } = useQuery({
     queryKey: ['alerts-active'],
-    queryFn: () => base44.entities.Alert.filter({ status: 'ativo' }, '-created_date', 5)
+    queryFn: () => base44.entities.Alert.filter({ status: 'ativo' }, '-created_date', 5),
+    refetchInterval: 15000,
   });
 
   const { data: contacts = [] } = useQuery({
@@ -50,7 +51,19 @@ export default function Home() {
     hour < 18 ? 'Boa Tarde' :
     'Boa Noite';
 
-  const hasActiveAlert = alerts.length > 0;
+  // Só conta como alerta ATIVO em curso:
+  // 1) Pânico manual (SOS) acionado pelo usuário, ou
+  // 2) Alerta detectado pela IA com severidade alta/crítica
+  // E criado nos últimos 30 minutos (eventos antigos não-resolvidos não devem assustar a tela inicial)
+  const THIRTY_MIN = 30 * 60 * 1000;
+  const now = Date.now();
+  const liveAlert = alerts.find(a => {
+    const age = now - new Date(a.created_date).getTime();
+    if (age > THIRTY_MIN) return false;
+    if (a.type === 'manual') return true; // SOS pelo usuário
+    return a.severity === 'critico' || a.severity === 'alto'; // IA decidiu
+  });
+  const hasActiveAlert = !!liveAlert;
   const status = hasActiveAlert ? 'perigo' : 'segura';
 
   const handleSOSTap = () => {
@@ -80,8 +93,8 @@ export default function Home() {
 
   const handleSOSClose = async (isFalseAlarm) => {
     setSosActive(false);
-    if (isFalseAlarm && alerts[0]) {
-      await base44.entities.Alert.update(alerts[0].id, {
+    if (isFalseAlarm && liveAlert) {
+      await base44.entities.Alert.update(liveAlert.id, {
         status: 'falso_positivo',
         user_responded: true
       });
@@ -123,7 +136,11 @@ export default function Home() {
           <div className="flex-1 min-w-0">
             <p className="text-red-600 font-bold text-xs">Alerta Ativo</p>
             <p className="text-red-400 text-xs truncate">
-              {alerts[0]?.type === 'manual' ? 'Pânico acionado' : alerts[0]?.type}
+              {liveAlert?.type === 'manual' ? 'Pânico acionado' :
+               liveAlert?.type === 'queda' ? 'Queda detectada (IA)' :
+               liveAlert?.type === 'imobilidade' ? 'Imobilidade prolongada (IA)' :
+               liveAlert?.type === 'rota_desviada' ? 'Rota desviada (IA)' :
+               liveAlert?.type}
             </p>
           </div>
           <button
@@ -227,7 +244,7 @@ export default function Home() {
       {/* Agent chat */}
       {chatOpen && (
         <AgentChat
-          alert={hasActiveAlert ? alerts[0] : null}
+          alert={liveAlert || null}
           onClose={() => setChatOpen(false)}
         />
       )}
