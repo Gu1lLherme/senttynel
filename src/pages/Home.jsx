@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
-import { Zap, MapPin, Play, Square, Bot } from 'lucide-react';
+import { Zap, MapPin, Play, Square } from 'lucide-react';
 import StatusBadge from '@/components/sentinel/StatusBadge';
 import SOSModal from '@/components/sentinel/SOSModal';
-import AgentChat from '@/components/sentinel/AgentChat';
 
 export default function Home() {
   const [user, setUser] = useState(null);
@@ -13,7 +12,6 @@ export default function Home() {
   const [running, setRunning] = useState(false);
   const [gpsActive, setGpsActive] = useState(false);
   const [sosStep, setSosStep] = useState(0);
-  const [chatOpen, setChatOpen] = useState(false);
 
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => {});
@@ -137,36 +135,13 @@ export default function Home() {
             <p className="text-red-600 font-bold text-xs">Alerta Ativo</p>
             <p className="text-red-400 text-xs truncate">
               {liveAlert?.type === 'manual' ? 'Pânico acionado' :
-               liveAlert?.type === 'queda' ? 'Queda detectada (IA)' :
-               liveAlert?.type === 'imobilidade' ? 'Imobilidade prolongada (IA)' :
-               liveAlert?.type === 'rota_desviada' ? 'Rota desviada (IA)' :
+               liveAlert?.type === 'queda' ? 'Queda detectada' :
+               liveAlert?.type === 'imobilidade' ? 'Imobilidade prolongada' :
+               liveAlert?.type === 'rota_desviada' ? 'Rota desviada' :
                liveAlert?.type}
             </p>
           </div>
-          <button
-            onClick={() => setChatOpen(true)}
-            className="px-2.5 py-1.5 rounded-lg bg-red-600 text-white text-[11px] font-bold flex items-center gap-1 hover:bg-red-700 transition-colors flex-shrink-0"
-          >
-            <Bot size={11} />
-            Ajuda IA
-          </button>
         </div>
-      )}
-
-      {/* Helper IA — sempre disponível */}
-      {!hasActiveAlert && (
-        <button
-          onClick={() => setChatOpen(true)}
-          className="flex-shrink-0 mt-3 p-2.5 rounded-xl bg-blue-50 border border-blue-100 flex items-center gap-2.5 hover:bg-blue-100 transition-colors"
-        >
-          <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-            <Bot size={14} className="text-blue-600" />
-          </div>
-          <div className="flex-1 min-w-0 text-left">
-            <p className="text-blue-700 font-bold text-xs">SENTINEL Helper</p>
-            <p className="text-blue-500 text-xs truncate">Converse com a IA em caso de necessidade</p>
-          </div>
-        </button>
       )}
 
       {/* SOS Button — fills available space */}
@@ -239,14 +214,6 @@ export default function Home() {
       {/* SOS Modal */}
       {sosActive && (
         <SOSModal contacts={contacts} onClose={handleSOSClose} />
-      )}
-
-      {/* Agent chat */}
-      {chatOpen && (
-        <AgentChat
-          alert={liveAlert || null}
-          onClose={() => setChatOpen(false)}
-        />
       )}
     </div>
   );
