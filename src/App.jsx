@@ -17,6 +17,8 @@ import ControleParental from '@/pages/ControleParental';
 import AdminDashboard from '@/pages/AdminDashboard';
 import EncontrarDispositivo from '@/pages/EncontrarDispositivo';
 import CriancaDetalhe from '@/pages/CriancaDetalhe';
+import CadastrarFamilia from '@/pages/CadastrarFamilia';
+import CadastrarDispositivos from '@/pages/CadastrarDispositivos';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -60,6 +62,8 @@ const AuthenticatedApp = () => {
         <Route path="/mapa" element={<Mapa />} />
         <Route path="/contatos" element={<Contatos />} />
         <Route path="/familia" element={<ControleParental />} />
+        <Route path="/familia/cadastrar" element={<CadastrarFamilia />} />
+        <Route path="/familia/dispositivos" element={<CadastrarDispositivos />} />
         <Route path="/familia/:id" element={<CriancaDetalhe />} />
         <Route path="/encontrar-dispositivo" element={<EncontrarDispositivo />} />
         <Route path="/configuracoes" element={<Configuracoes />} />
