@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
-import { useQuery } from '@tanstack/react-query';
-import { Zap, MapPin, Play, Square } from 'lucide-react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { Zap, MapPin, Play, Square, Check } from 'lucide-react';
 import StatusBadge from '@/components/sentinel/StatusBadge';
 import SOSModal from '@/components/sentinel/SOSModal';
 
@@ -12,6 +12,8 @@ export default function Home() {
   const [running, setRunning] = useState(false);
   const [gpsActive, setGpsActive] = useState(false);
   const [sosStep, setSosStep] = useState(0);
+  const [dismissing, setDismissing] = useState(false);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => {});
@@ -99,6 +101,21 @@ export default function Home() {
     }
   };
 
+  const handleImOk = async () => {
+    if (!liveAlert) return;
+    setDismissing(true);
+    try {
+      await base44.entities.Alert.update(liveAlert.id, {
+        status: 'falso_positivo',
+        user_responded: true,
+        notes: (liveAlert.notes || '') + ' · Usuário confirmou que está bem'
+      });
+      queryClient.invalidateQueries({ queryKey: ['alerts-active'] });
+    } finally {
+      setDismissing(false);
+    }
+  };
+
   const toggleGps = () => {
     if (!gpsActive && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -141,6 +158,14 @@ export default function Home() {
                liveAlert?.type}
             </p>
           </div>
+          <button
+            onClick={handleImOk}
+            disabled={dismissing}
+            className="flex-shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-emerald-600 text-white text-[11px] font-bold hover:bg-emerald-700 disabled:opacity-60 transition"
+          >
+            <Check size={12} />
+            Estou bem
+          </button>
         </div>
       )}
 
