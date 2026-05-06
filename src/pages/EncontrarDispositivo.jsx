@@ -1,20 +1,31 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
-import { useQuery } from '@tanstack/react-query';
-import { ArrowLeft, Bell, MapPin, Lock, Loader2, Smartphone, Volume2, Battery } from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { ArrowLeft, MapPin, Lock, Loader2, Smartphone, Volume2, Battery, Clock, X, CheckCircle2, History, Trash2 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger
+} from '@/components/ui/alert-dialog';
+
+const ACTION_META = {
+  ring: { icon: Volume2, label: 'Tocar alarme', color: 'blue' },
+  locate: { icon: MapPin, label: 'Localizar', color: 'emerald' },
+  lock: { icon: Lock, label: 'Bloquear', color: 'red' },
+};
 
 export default function EncontrarDispositivo() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [selected, setSelected] = useState(null);
   const [loadingAction, setLoadingAction] = useState(null);
 
   const { data: links = [], isLoading } = useQuery({
-    queryKey: ['parental-links'],
+    queryKey: ['parental-links-active'],
     queryFn: () => base44.entities.ParentalLink.filter({ status: 'ativo' }),
   });
 
@@ -30,26 +41,59 @@ export default function EncontrarDispositivo() {
     enabled: !!selected,
   });
 
-  const triggerAction = async (action) => {
-    if (!selected) return;
-    setLoadingAction(action);
-    try {
+  // Histórico de pedidos para o alvo selecionado (CRUD: READ)
+  const { data: requests = [] } = useQuery({
+    queryKey: ['find-requests', selected?.child_email],
+    queryFn: () => base44.entities.FindDeviceRequest.filter(
+      { target_email: selected.child_email }, '-created_date', 20
+    ),
+    enabled: !!selected,
+    refetchInterval: 5000,
+  });
+
+  // CRUD: CREATE (via função backend) + invalidação
+  const createRequest = useMutation({
+    mutationFn: async (action) => {
       const res = await base44.functions.invoke('findDevice', {
         target_email: selected.child_email,
         action,
         message: action === 'ring' ? 'Toque o alarme para localizar o dispositivo' : '',
       });
-      const messages = {
-        ring: 'Alarme acionado no dispositivo',
-        locate: 'Localização solicitada',
-        lock: 'Pedido de bloqueio enviado',
-      };
+      return res.data;
+    },
+    onSuccess: (_, action) => {
+      queryClient.invalidateQueries({ queryKey: ['find-requests', selected.child_email] });
+      const messages = { ring: 'Alarme acionado', locate: 'Localização solicitada', lock: 'Bloqueio enviado' };
       toast({ title: messages[action], description: 'O dispositivo foi notificado.' });
-    } catch (err) {
+    },
+    onError: (err) => {
       toast({ title: 'Erro', description: err.response?.data?.error || err.message, variant: 'destructive' });
-    } finally {
-      setLoadingAction(null);
-    }
+    },
+    onSettled: () => setLoadingAction(null),
+  });
+
+  // CRUD: UPDATE (cancelar pedido pendente)
+  const cancelRequest = useMutation({
+    mutationFn: (id) => base44.entities.FindDeviceRequest.update(id, { status: 'ignorada' }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['find-requests', selected.child_email] });
+      toast({ title: 'Pedido cancelado' });
+    },
+  });
+
+  // CRUD: DELETE (remover do histórico)
+  const deleteRequest = useMutation({
+    mutationFn: (id) => base44.entities.FindDeviceRequest.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['find-requests', selected.child_email] });
+      toast({ title: 'Removido do histórico' });
+    },
+  });
+
+  const triggerAction = (action) => {
+    if (!selected) return;
+    setLoadingAction(action);
+    createRequest.mutate(action);
   };
 
   return (
@@ -74,7 +118,6 @@ export default function EncontrarDispositivo() {
         </p>
       </div>
 
-      {/* Lista de dispositivos */}
       {isLoading ? (
         <div className="space-y-2">
           {[1, 2].map(i => <div key={i} className="h-16 rounded-2xl bg-gray-100 animate-pulse" />)}
@@ -84,6 +127,12 @@ export default function EncontrarDispositivo() {
           <div className="text-5xl mb-3">📱</div>
           <p className="text-foreground font-semibold">Nenhum dispositivo vinculado</p>
           <p className="text-muted-foreground text-sm mt-1">Vincule um familiar em "Família"</p>
+          <button
+            onClick={() => navigate('/familia')}
+            className="mt-4 px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-bold hover:bg-blue-700"
+          >
+            Ir para Família
+          </button>
         </div>
       ) : (
         <>
@@ -92,7 +141,7 @@ export default function EncontrarDispositivo() {
               <button
                 key={link.id}
                 onClick={() => setSelected(link)}
-                className={`w-full p-3 rounded-2xl flex items-center gap-3 transition-all border-2 ${
+                className={`w-full p-3 rounded-2xl flex items-center gap-3 transition border-2 ${
                   selected?.id === link.id
                     ? 'bg-blue-50 border-blue-400'
                     : 'bg-white border-gray-200 hover:border-blue-200'
@@ -105,7 +154,9 @@ export default function EncontrarDispositivo() {
                 </div>
                 <div className="flex-1 min-w-0 text-left">
                   <p className="text-foreground font-bold text-sm truncate">{link.child_name}</p>
-                  <p className="text-muted-foreground text-xs truncate">{link.child_email}</p>
+                  <p className="text-muted-foreground text-xs truncate">
+                    {link.relationship_label || link.child_email}
+                  </p>
                 </div>
               </button>
             ))}
@@ -143,7 +194,7 @@ export default function EncontrarDispositivo() {
               </div>
 
               {/* Ações */}
-              <div className="space-y-2">
+              <div className="space-y-2 mb-5">
                 <ActionButton
                   icon={Volume2}
                   label="Tocar alarme"
@@ -170,11 +221,31 @@ export default function EncontrarDispositivo() {
                 />
               </div>
 
-              <div className="mt-5 p-3 rounded-2xl bg-blue-50 border border-blue-100">
+              {/* Histórico de pedidos (CRUD completo) */}
+              {requests.length > 0 && (
+                <div className="glass-card rounded-2xl p-4 mb-4">
+                  <div className="flex items-center gap-2 mb-3">
+                    <History size={14} className="text-blue-600" />
+                    <h3 className="text-foreground font-bold text-sm">Histórico de pedidos</h3>
+                  </div>
+                  <div className="space-y-2">
+                    {requests.map(r => (
+                      <RequestRow
+                        key={r.id}
+                        request={r}
+                        onCancel={() => cancelRequest.mutate(r.id)}
+                        onDelete={() => deleteRequest.mutate(r.id)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="p-3 rounded-2xl bg-blue-50 border border-blue-100">
                 <p className="text-blue-700 text-xs font-semibold mb-1">🔔 Como funciona</p>
                 <p className="text-blue-600/70 text-xs">
                   Uma notificação push chegará no dispositivo do familiar com a ação solicitada.
-                  Funciona mesmo com o celular bloqueado, desde que o app esteja instalado e com permissão de notificações.
+                  Pedidos pendentes podem ser cancelados antes de serem executados.
                 </p>
               </div>
             </>
@@ -195,7 +266,7 @@ function ActionButton({ icon: Icon, label, desc, color, loading, onClick }) {
     <button
       onClick={onClick}
       disabled={loading}
-      className="w-full p-4 rounded-2xl bg-white border border-gray-200 flex items-center gap-3 hover:bg-gray-50 active:scale-[0.98] transition-all disabled:opacity-60"
+      className="w-full p-4 rounded-2xl bg-white border border-gray-200 flex items-center gap-3 hover:bg-gray-50 active:scale-[0.98] transition disabled:opacity-60"
     >
       <div className={`w-11 h-11 rounded-xl border flex items-center justify-center ${colors[color]}`}>
         {loading ? <Loader2 size={18} className="animate-spin" /> : <Icon size={18} />}
@@ -205,5 +276,63 @@ function ActionButton({ icon: Icon, label, desc, color, loading, onClick }) {
         <p className="text-muted-foreground text-xs">{desc}</p>
       </div>
     </button>
+  );
+}
+
+function RequestRow({ request, onCancel, onDelete }) {
+  const meta = ACTION_META[request.action] || { icon: Smartphone, label: request.action, color: 'blue' };
+  const Icon = meta.icon;
+  const statusConfig = {
+    pendente: { label: 'Pendente', color: 'text-amber-600 bg-amber-50', icon: Clock },
+    executada: { label: 'Executada', color: 'text-emerald-600 bg-emerald-50', icon: CheckCircle2 },
+    ignorada: { label: 'Cancelada', color: 'text-gray-500 bg-gray-100', icon: X },
+  };
+  const sc = statusConfig[request.status] || statusConfig.pendente;
+  const StatusIcon = sc.icon;
+
+  return (
+    <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-gray-50 border border-gray-100">
+      <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center flex-shrink-0">
+        <Icon size={13} className="text-blue-600" />
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-foreground font-semibold text-xs">{meta.label}</p>
+        <p className="text-muted-foreground text-[10px]">
+          {format(new Date(request.created_date), "dd/MM HH:mm", { locale: ptBR })}
+        </p>
+      </div>
+      <div className={`px-2 py-0.5 rounded-full text-[10px] font-bold flex items-center gap-1 ${sc.color}`}>
+        <StatusIcon size={9} />
+        {sc.label}
+      </div>
+      {request.status === 'pendente' && (
+        <button
+          onClick={onCancel}
+          className="w-7 h-7 rounded-lg bg-amber-50 hover:bg-amber-100 flex items-center justify-center"
+          aria-label="Cancelar"
+        >
+          <X size={12} className="text-amber-600" />
+        </button>
+      )}
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <button className="w-7 h-7 rounded-lg bg-red-50 hover:bg-red-100 flex items-center justify-center">
+            <Trash2 size={12} className="text-red-500" />
+          </button>
+        </AlertDialogTrigger>
+        <AlertDialogContent className="bg-white max-w-sm mx-auto">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remover do histórico?</AlertDialogTitle>
+            <AlertDialogDescription>Esta ação não pode ser desfeita.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={onDelete} className="bg-red-600 text-white hover:bg-red-700">
+              Remover
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
   );
 }

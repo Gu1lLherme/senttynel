@@ -8,19 +8,33 @@
     },
     "child_email": {
       "type": "string",
-      "description": "Email da crian\u00e7a monitorada"
+      "description": "Email da pessoa monitorada"
     },
     "child_name": {
       "type": "string",
-      "description": "Nome da crian\u00e7a"
+      "description": "Nome da pessoa"
     },
     "child_age": {
       "type": "integer",
-      "description": "Idade da crian\u00e7a"
+      "description": "Idade"
     },
     "child_photo_url": {
       "type": "string",
-      "description": "URL da foto da crian\u00e7a"
+      "description": "URL da foto"
+    },
+    "group": {
+      "type": "string",
+      "enum": [
+        "conjuge",
+        "filho",
+        "parente"
+      ],
+      "default": "filho",
+      "description": "Grupo familiar: c\u00f4njuge/parceiro(a), filho(a) ou parente (av\u00f3s, pais idosos, tios)"
+    },
+    "relationship_label": {
+      "type": "string",
+      "description": "Rela\u00e7\u00e3o espec\u00edfica (ex: av\u00f3, m\u00e3e, irm\u00e3o, esposa)"
     },
     "blood_type": {
       "type": "string",
@@ -79,7 +93,7 @@
     "share_alerts": {
       "type": "boolean",
       "default": true,
-      "description": "Notificar pai sobre alertas (queda, p\u00e2nico, etc.)"
+      "description": "Notificar sobre alertas (queda, p\u00e2nico, etc.)"
     },
     "email_notifications": {
       "type": "boolean",
