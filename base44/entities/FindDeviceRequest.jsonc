@@ -1,0 +1,50 @@
+{
+  "name": "FindDeviceRequest",
+  "type": "object",
+  "properties": {
+    "requester_email": {
+      "type": "string",
+      "description": "Quem solicitou (parceiro/pai)"
+    },
+    "target_email": {
+      "type": "string",
+      "description": "Email do dono do dispositivo procurado"
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "ring",
+        "locate",
+        "lock"
+      ],
+      "description": "Tipo de a\u00e7\u00e3o solicitada"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pendente",
+        "executada",
+        "ignorada"
+      ],
+      "default": "pendente"
+    },
+    "message": {
+      "type": "string",
+      "description": "Mensagem opcional para a tela do alvo"
+    },
+    "result_lat": {
+      "type": "number"
+    },
+    "result_lng": {
+      "type": "number"
+    },
+    "executed_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "target_email",
+    "action"
+  ]
+}

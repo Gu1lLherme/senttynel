@@ -15,6 +15,7 @@ import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger
 } from '@/components/ui/alert-dialog';
+import PushPermissionCard from '@/components/sentinel/PushPermissionCard';
 
 const zoneIcons = {
   home: { icon: Home, color: 'text-blue-600', bg: 'bg-blue-50', label: 'Casa' },
@@ -159,6 +160,11 @@ export default function Configuracoes() {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Push notifications */}
+      <div className="mb-4">
+        <PushPermissionCard />
       </div>
 
       {/* Notifications */}

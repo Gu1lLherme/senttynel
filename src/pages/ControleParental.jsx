@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Plus, Trash2, Baby, MapPin, Battery, BellRing, Shield, Mail, Smartphone, FileText, Loader2 } from 'lucide-react';
+import { Plus, Trash2, Baby, MapPin, Battery, BellRing, Shield, Mail, Smartphone, FileText, Loader2, ChevronRight, Search } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,6 +14,7 @@ import {
 } from '@/components/ui/alert-dialog';
 
 export default function ControleParental() {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ child_name: '', child_email: '', child_age: 10 });
   const [downloadingId, setDownloadingId] = useState(null);
@@ -118,6 +120,21 @@ export default function ControleParental() {
         </div>
       </div>
 
+      {/* Quick action — encontrar dispositivo */}
+      <button
+        onClick={() => navigate('/encontrar-dispositivo')}
+        className="w-full mb-3 p-3 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-800 text-white flex items-center gap-3 shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all"
+      >
+        <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+          <Search size={18} className="text-white" />
+        </div>
+        <div className="flex-1 text-left">
+          <p className="font-bold text-sm">Encontrar dispositivo</p>
+          <p className="text-blue-100 text-xs">Tocar alarme, localizar ou bloquear</p>
+        </div>
+        <ChevronRight size={18} className="text-white/80" />
+      </button>
+
       {/* Add */}
       <button
         onClick={() => setOpen(true)}
@@ -148,10 +165,15 @@ export default function ControleParental() {
             <div key={link.id} className="glass-card rounded-2xl p-4 slide-up">
               {/* Header */}
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-black text-lg flex-shrink-0">
-                  {link.child_name?.[0]?.toUpperCase() || '?'}
-                </div>
-                <div className="flex-1 min-w-0">
+                <button
+                  onClick={() => navigate(`/familia/${link.id}`)}
+                  className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-black text-lg flex-shrink-0 overflow-hidden hover:opacity-90 transition-opacity"
+                >
+                  {link.child_photo_url
+                    ? <img src={link.child_photo_url} alt={link.child_name} className="w-full h-full object-cover" />
+                    : link.child_name?.[0]?.toUpperCase() || '?'}
+                </button>
+                <button onClick={() => navigate(`/familia/${link.id}`)} className="flex-1 min-w-0 text-left">
                   <div className="flex items-center gap-2">
                     <p className="text-foreground font-bold text-base truncate">{link.child_name}</p>
                     {link.child_age && (
@@ -173,7 +195,8 @@ export default function ControleParental() {
                       {link.status === 'ativo' ? 'Ativo' : link.status === 'pendente' ? 'Aguardando confirmação' : 'Pausado'}
                     </span>
                   </div>
-                </div>
+                </button>
+                <ChevronRight size={16} className="text-gray-400 flex-shrink-0" />
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <button
