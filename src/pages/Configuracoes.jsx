@@ -4,7 +4,7 @@ import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Plus, Trash2, Home, Briefcase, GraduationCap, MapPin, Settings,
-  Bell, Shield, LayoutDashboard, ChevronRight, LogOut, Loader2,
+  Bell, Shield, LayoutDashboard, ChevronRight, LogOut, Loader2, CreditCard, Sparkles,
 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -117,6 +117,24 @@ export default function Configuracoes() {
         </div>
         <h1 className="text-foreground text-3xl font-black">Configurações</h1>
       </div>
+
+      {/* Plans / Billing */}
+      <button
+        onClick={() => navigate('/planos')}
+        className="w-full mb-4 p-4 rounded-2xl bg-gradient-to-br from-pink-500 via-purple-600 to-blue-700 text-white flex items-center gap-3 shadow-lg shadow-purple-500/20 active:scale-[0.98] transition-all"
+      >
+        <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+          <CreditCard size={18} className="text-white" />
+        </div>
+        <div className="flex-1 text-left">
+          <div className="flex items-center gap-1.5">
+            <p className="font-bold text-sm">Planos & Assinatura</p>
+            <Sparkles size={12} className="text-yellow-200" />
+          </div>
+          <p className="text-white/90 text-xs">Básico, Premium e Family</p>
+        </div>
+        <ChevronRight size={18} className="text-white/80" />
+      </button>
 
       {/* Admin Dashboard Access */}
       {isAdmin && (

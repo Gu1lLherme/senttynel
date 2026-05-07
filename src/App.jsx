@@ -19,6 +19,7 @@ import EncontrarDispositivo from '@/pages/EncontrarDispositivo';
 import CriancaDetalhe from '@/pages/CriancaDetalhe';
 import CadastrarFamilia from '@/pages/CadastrarFamilia';
 import CadastrarDispositivos from '@/pages/CadastrarDispositivos';
+import Planos from '@/pages/Planos';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -52,6 +53,7 @@ const AuthenticatedApp = () => {
       <Route path="/bem-vindo" element={<BemVindo />} />
       <Route path="/acesso" element={<Acesso />} />
       <Route path="/administrativo/dashboard" element={<AdminDashboard />} />
+      <Route path="/planos" element={<Planos />} />
 
       {/* Default landing → BemVindo */}
       <Route path="/" element={<BemVindo />} />
