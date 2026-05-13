@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+// SOS — paleta SENTINEL: vermelho #A81825, borda inferior 1px #7A1020,
+// border-radius 18px, sem sombra elevada genérica.
 export default function SOSButton({ onActivate }) {
   const [pressing, setPressing] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -27,43 +29,10 @@ export default function SOSButton({ onActivate }) {
     setProgress(0);
   };
 
-  const circumference = 2 * Math.PI * 52;
-  const strokeDashoffset = circumference - (progress / 100) * circumference;
-
+  // Botão agora é “rounded-square” (18px), então o ring/progress segue um square.
   return (
     <div className="flex flex-col items-center gap-3">
-      <div className="relative flex items-center justify-center">
-        {/* Outer glow ring */}
-        <div className={`absolute inset-0 rounded-full transition-all duration-300 ${
-          pressing
-            ? 'shadow-[0_0_60px_rgba(220,38,38,0.6)]'
-            : 'shadow-[0_0_30px_rgba(220,38,38,0.35)] sos-pulse'
-        }`} />
-
-        {/* Progress ring */}
-        {pressing && (
-          <svg
-            className="absolute inset-0 -rotate-90"
-            width="132"
-            height="132"
-            viewBox="0 0 132 132"
-          >
-            <circle
-              cx="66"
-              cy="66"
-              r="52"
-              fill="none"
-              stroke="rgba(220,38,38,0.4)"
-              strokeWidth="4"
-              strokeDasharray={circumference}
-              strokeDashoffset={strokeDashoffset}
-              strokeLinecap="round"
-              className="transition-all duration-100"
-            />
-          </svg>
-        )}
-
-        {/* Main button */}
+      <div className="relative">
         <button
           onMouseDown={startPress}
           onMouseUp={cancelPress}
@@ -72,24 +41,38 @@ export default function SOSButton({ onActivate }) {
           onTouchEnd={cancelPress}
           aria-label="Botão SOS de emergência — segure por 3 segundos"
           className={`
-            relative w-32 h-32 rounded-full bg-gradient-to-br from-red-500 to-red-700
-            flex flex-col items-center justify-center cursor-pointer select-none
-            transition-all duration-200 active:scale-95
-            ${pressing ? 'scale-95 brightness-110' : 'hover:brightness-110'}
+            relative w-36 h-36 flex flex-col items-center justify-center
+            cursor-pointer select-none transition-transform duration-150
+            active:scale-[0.97] ${pressing ? 'scale-[0.97] brightness-110' : ''}
           `}
           style={{
-            boxShadow: pressing
-              ? '0 0 0 6px rgba(220,38,38,0.2), 0 8px 32px rgba(220,38,38,0.5)'
-              : '0 0 0 4px rgba(220,38,38,0.15), 0 8px 24px rgba(220,38,38,0.3)'
+            background: '#A81825',
+            borderRadius: 18,
+            borderBottom: '1px solid #7A1020',
+            color: '#FFFFFF',
           }}
         >
-          <span className="text-white font-black text-2xl tracking-widest">SOS</span>
-          <span className="text-white/80 text-xs font-semibold tracking-wider">
+          <span className="font-display text-3xl tracking-[0.18em]">SOS</span>
+          <span className="text-[11px] font-semibold tracking-[0.18em] mt-1 text-white/85">
             {pressing ? `${Math.round(progress)}%` : 'EMERGÊNCIA'}
           </span>
+
+          {/* Barra de progresso na borda inferior, sem ring elevado */}
+          {pressing && (
+            <span
+              className="absolute left-0 bottom-0 h-[3px]"
+              style={{
+                width: `${progress}%`,
+                background: '#FFFFFF',
+                borderBottomLeftRadius: 18,
+                borderBottomRightRadius: progress >= 100 ? 18 : 0,
+                transition: 'width 100ms linear',
+              }}
+            />
+          )}
         </button>
       </div>
-      <p className="text-muted-foreground text-xs text-center">
+      <p className="text-sm" style={{ color: '#607090' }}>
         {pressing ? 'Aguarde para acionar…' : 'Segure por 3 seg. para acionar'}
       </p>
     </div>

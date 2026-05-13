@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup, Circle, useMap } from 'react-le
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-// Fix default marker icons for Leaflet (Vite doesn't bundle them by default)
+// Fix default marker icons for Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
@@ -11,20 +11,17 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
 
-// Custom icons
+// Marker do usuário — círculo 14px, primary #1743B8, borda branca 2.5px
 const userIcon = L.divIcon({
   className: 'sentinel-user-marker',
-  html: `<div style="position:relative;width:28px;height:28px;">
-    <div style="position:absolute;inset:0;border-radius:50%;background:rgba(59,130,246,0.3);animation:pulse 2s infinite;"></div>
-    <div style="position:absolute;inset:6px;border-radius:50%;background:#3b82f6;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.3);"></div>
-  </div>`,
-  iconSize: [28, 28],
-  iconAnchor: [14, 14],
+  html: `<div style="width:14px;height:14px;border-radius:50%;background:#1743B8;border:2.5px solid #FFFFFF;box-shadow:0 2px 6px rgba(23,67,184,0.45);"></div>`,
+  iconSize: [14, 14],
+  iconAnchor: [7, 7],
 });
 
 const alertIcon = L.divIcon({
   className: 'sentinel-alert-marker',
-  html: `<div style="width:24px;height:24px;border-radius:50%;background:#dc2626;border:3px solid white;box-shadow:0 2px 8px rgba(220,38,38,0.5);display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:12px;">!</div>`,
+  html: `<div style="width:24px;height:24px;border-radius:50%;background:#A81825;border:3px solid white;box-shadow:0 2px 8px rgba(168,24,37,0.5);display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:12px;">!</div>`,
   iconSize: [24, 24],
   iconAnchor: [12, 12],
 });
@@ -41,10 +38,10 @@ export default function LiveMap({
   center = [-23.5505, -46.6333],
   zoom = 14,
   userPosition,
+  userAccuracyRadius = 80, // raio da cerca tracejada ao redor do usuário, em metros
   zones = [],
   alerts = [],
   height = '100%',
-  onMapClick,
 }) {
   const mapRef = useRef(null);
   const mapCenter = userPosition || center;
@@ -63,14 +60,28 @@ export default function LiveMap({
         <RecenterMap center={mapCenter} />
 
         {userPosition && (
-          <Marker position={userPosition} icon={userIcon}>
-            <Popup>Você está aqui</Popup>
-          </Marker>
+          <>
+            {/* Cerca tracejada ao redor do usuário */}
+            <Circle
+              center={userPosition}
+              radius={userAccuracyRadius}
+              pathOptions={{
+                color: '#1743B8',
+                weight: 1.5,
+                fillColor: '#1743B8',
+                fillOpacity: 0.07,
+                dashArray: '5 4',
+              }}
+            />
+            <Marker position={userPosition} icon={userIcon}>
+              <Popup>Você está aqui</Popup>
+            </Marker>
+          </>
         )}
 
         {zones.filter(z => z.lat && z.lng).map(zone => {
           const isDanger = zone.zone_type === 'danger';
-          const color = !zone.is_active ? '#9ca3af' : (isDanger ? '#dc2626' : '#10b981');
+          const color = !zone.is_active ? '#8A9FC0' : (isDanger ? '#A81825' : '#155230');
           return (
           <Circle
             key={zone.id}

@@ -2,6 +2,7 @@ import { base44 } from '@/api/base44Client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Home, Briefcase, GraduationCap, MapPin, AlertTriangle, Trash2 } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
+import StatusPill from '@/components/sentinel/StatusPill';
 import { useToast } from '@/components/ui/use-toast';
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
@@ -60,9 +61,9 @@ export default function ZoneList({ zones = [], emptyText, accent = 'blue' }) {
               <p className="text-foreground font-semibold text-sm truncate">{zone.name}</p>
               <p className="text-muted-foreground text-xs truncate">{zone.address}</p>
               {zone.lat && (
-                <p className="text-emerald-600 text-[10px] font-semibold">
-                  ✓ Localizado · raio {zone.radius_meters}m
-                </p>
+                <div className="mt-1">
+                  <StatusPill size="sm" label={`Localizado · raio ${zone.radius_meters}m`} />
+                </div>
               )}
             </div>
             <Switch

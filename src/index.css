@@ -2,30 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 @layer base {
   :root {
-    --background: 214 100% 97%;
-    --foreground: 215 25% 15%;
-    --card: 0 0% 100%;
-    --card-foreground: 215 25% 15%;
+    /* SENTINEL — Índigo Profundo
+       Mantemos os nomes de tokens shadcn, mas remapeados para a nova paleta. */
+    --background: 218 41% 95%;       /* #EBF0F8 */
+    --foreground: 219 65% 13%;       /* #0C1A38 */
+    --card: 0 0% 100%;               /* #FFFFFF */
+    --card-foreground: 219 65% 13%;
     --popover: 0 0% 100%;
-    --popover-foreground: 215 25% 15%;
-    --primary: 210 90% 52%;
+    --popover-foreground: 219 65% 13%;
+    --primary: 224 78% 40%;          /* #1743B8 */
     --primary-foreground: 0 0% 100%;
-    --secondary: 210 20% 93%;
-    --secondary-foreground: 215 25% 25%;
-    --muted: 210 15% 92%;
-    --muted-foreground: 215 15% 50%;
-    --accent: 0 85% 58%;
+    --secondary: 218 41% 95%;
+    --secondary-foreground: 219 65% 13%;
+    --muted: 218 38% 84%;            /* #C4D0E5 */
+    --muted-foreground: 218 22% 47%; /* #607090 */
+    --accent: 358 75% 38%;           /* #A81825 */
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 85% 58%;
+    --destructive: 358 75% 38%;      /* #A81825 */
     --destructive-foreground: 0 0% 100%;
-    --border: 210 20% 88%;
-    --input: 210 20% 88%;
-    --ring: 210 90% 52%;
+    --border: 218 38% 84%;           /* #C4D0E5 */
+    --input: 218 38% 84%;
+    --ring: 224 78% 40%;
     --radius: 1rem;
+
+    /* Tokens custom SENTINEL — referenciáveis via Tailwind */
+    --safe-green: 145 58% 21%;       /* #155230 */
+    --safe-green-bg: 142 47% 90%;    /* #DDF0E6 */
+    --danger-red: 358 75% 38%;       /* #A81825 */
+    --danger-red-dark: 354 77% 27%;  /* #7A1020 */
+    --nav-inactive: 218 32% 34%;     /* #3A4E72 */
+    --text-muted: 217 36% 65%;       /* #8A9FC0 */
   }
 }
 
@@ -36,59 +46,56 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Sora', 'Plus Jakarta Sans', sans-serif;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
   }
+
+  /* Tipografia por classe semântica */
+  .font-display { font-family: 'DM Serif Display', 'Lora', serif; }
+  .font-body    { font-family: 'Sora', 'Plus Jakarta Sans', sans-serif; }
+  .font-mono    { font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace; }
 }
 
 @layer utilities {
   .glow-red {
-    box-shadow: 0 0 20px rgba(220, 38, 38, 0.3), 0 0 60px rgba(220, 38, 38, 0.15);
+    box-shadow: 0 0 20px rgba(168, 24, 37, 0.28), 0 0 60px rgba(168, 24, 37, 0.14);
   }
-
   .glow-blue {
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), 0 0 60px rgba(59, 130, 246, 0.15);
+    box-shadow: 0 0 20px rgba(23, 67, 184, 0.3), 0 0 60px rgba(23, 67, 184, 0.15);
   }
 
   .glass-card {
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(16px);
-    border: 1px solid rgba(59, 130, 246, 0.08);
-    box-shadow: 0 2px 12px rgba(59, 130, 246, 0.06);
+    border: 1px solid #C4D0E5;
+    box-shadow: 0 2px 12px rgba(23, 67, 184, 0.06);
   }
 
   .sos-pulse {
     animation: sosPulse 2s ease-in-out infinite;
   }
-
   @keyframes sosPulse {
-    0%, 100% { box-shadow: 0 0 20px rgba(220, 38, 38, 0.4), 0 0 60px rgba(220, 38, 38, 0.2); }
-    50% { box-shadow: 0 0 40px rgba(220, 38, 38, 0.7), 0 0 100px rgba(220, 38, 38, 0.35); }
+    0%, 100% { box-shadow: 0 0 20px rgba(168, 24, 37, 0.35), 0 0 60px rgba(168, 24, 37, 0.18); }
+    50%      { box-shadow: 0 0 40px rgba(168, 24, 37, 0.6),  0 0 100px rgba(168, 24, 37, 0.3); }
   }
 
-  .slide-up {
-    animation: slideUp 0.3s ease-out;
-  }
-
+  .slide-up { animation: slideUp 0.3s ease-out; }
   @keyframes slideUp {
     from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+    to   { transform: translateY(0); opacity: 1; }
   }
 }
 
 /* Leaflet z-index fixes */
 .leaflet-container {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Sora', 'Plus Jakarta Sans', sans-serif;
   z-index: 0;
 }
-.leaflet-popup-content-wrapper {
-  border-radius: 12px;
-}
-.leaflet-control-attribution {
-  display: none;
-}
+.leaflet-popup-content-wrapper { border-radius: 12px; }
+.leaflet-control-attribution { display: none; }
+
 @keyframes pulse {
   0%, 100% { transform: scale(1); opacity: 0.6; }
-  50% { transform: scale(1.5); opacity: 0.2; }
+  50%      { transform: scale(1.5); opacity: 0.2; }
 }

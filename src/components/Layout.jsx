@@ -14,40 +14,35 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col max-w-md mx-auto relative">
-      {/* Main content */}
       <main className="flex-1 pb-20 overflow-y-auto">
         <Outlet />
       </main>
 
-      {/* Bottom Navigation */}
+      {/* Bottom Navigation — sem fundo no item ativo, apenas cor */}
       <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md z-20">
-        <div className="bg-white/90 backdrop-blur-xl border-t border-gray-200 px-2 py-2 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+        <div
+          className="px-2 py-2"
+          style={{
+            background: 'rgba(255,255,255,0.92)',
+            backdropFilter: 'blur(16px)',
+            borderTop: '1px solid #C4D0E5',
+            boxShadow: '0 -4px 20px rgba(12,26,56,0.04)',
+          }}
+        >
           <div className="flex justify-around items-center">
             {navItems.map(({ path, icon: Icon, label }) => {
               const isActive = location.pathname === path;
+              const color = isActive ? '#1743B8' : '#3A4E72';
+              const opacity = isActive ? 1 : 0.35;
               return (
                 <Link
                   key={path}
                   to={path}
-                  className={`flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all duration-200 cursor-pointer min-w-[56px] ${
-                    isActive
-                      ? 'text-blue-600'
-                      : 'text-gray-400 hover:text-gray-600'
-                  }`}
+                  className="flex flex-col items-center gap-1 px-4 py-2 cursor-pointer min-w-[56px] transition-opacity"
+                  style={{ color, opacity }}
                 >
-                  <div className={`p-1.5 rounded-lg transition-all duration-200 ${
-                    isActive ? 'bg-blue-50' : ''
-                  }`}>
-                    <Icon
-                      size={20}
-                      className={isActive ? 'text-blue-600' : 'text-gray-400'}
-                    />
-                  </div>
-                  <span className={`text-xs font-medium ${
-                    isActive ? 'text-blue-600' : 'text-gray-400'
-                  }`}>
-                    {label}
-                  </span>
+                  <Icon size={20} />
+                  <span className="text-xs font-medium">{label}</span>
                 </Link>
               );
             })}
