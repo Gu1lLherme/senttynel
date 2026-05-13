@@ -4,11 +4,24 @@
   "properties": {
     "name": {
       "type": "string",
-      "description": "Nome da zona segura"
+      "description": "Nome da zona"
+    },
+    "zone_type": {
+      "type": "string",
+      "enum": [
+        "safe",
+        "danger"
+      ],
+      "default": "safe",
+      "description": "Tipo: zona segura (safe) ou zona de perigo (danger)"
     },
     "address": {
       "type": "string",
       "description": "Endere\u00e7o completo"
+    },
+    "cep": {
+      "type": "string",
+      "description": "CEP (somente Brasil)"
     },
     "lat": {
       "type": "number"
@@ -19,7 +32,7 @@
     "radius_meters": {
       "type": "integer",
       "default": 200,
-      "description": "Raio de seguran\u00e7a em metros"
+      "description": "Raio em metros"
     },
     "icon": {
       "type": "string",
@@ -28,6 +41,7 @@
         "work",
         "school",
         "gym",
+        "danger",
         "other"
       ],
       "default": "home"
@@ -38,21 +52,20 @@
     },
     "child_email": {
       "type": "string",
-      "description": "Email da crian\u00e7a vinculada (opcional, para cercas espec\u00edficas)"
+      "description": "Email da pessoa vinculada (opcional)"
     },
     "notify_on_enter": {
       "type": "boolean",
       "default": true,
-      "description": "Notificar quando entrar na zona"
+      "description": "Notificar ao entrar na zona"
     },
     "notify_on_exit": {
       "type": "boolean",
       "default": true,
-      "description": "Notificar quando sair da zona"
+      "description": "Notificar ao sair da zona"
     }
   },
   "required": [
-    "name",
-    "address"
+    "name"
   ]
 }

@@ -68,16 +68,20 @@ export default function LiveMap({
           </Marker>
         )}
 
-        {zones.filter(z => z.lat && z.lng).map(zone => (
+        {zones.filter(z => z.lat && z.lng).map(zone => {
+          const isDanger = zone.zone_type === 'danger';
+          const color = !zone.is_active ? '#9ca3af' : (isDanger ? '#dc2626' : '#10b981');
+          return (
           <Circle
             key={zone.id}
             center={[zone.lat, zone.lng]}
             radius={zone.radius_meters || 200}
             pathOptions={{
-              color: zone.is_active ? '#10b981' : '#9ca3af',
-              fillColor: zone.is_active ? '#10b981' : '#9ca3af',
-              fillOpacity: 0.15,
+              color,
+              fillColor: color,
+              fillOpacity: isDanger ? 0.22 : 0.15,
               weight: 2,
+              dashArray: isDanger ? '6, 4' : undefined,
             }}
           >
             <Popup>
@@ -88,7 +92,8 @@ export default function LiveMap({
               </div>
             </Popup>
           </Circle>
-        ))}
+          );
+        })}
 
         {alerts.filter(a => a.location_lat && a.location_lng).map(alert => (
           <Marker key={alert.id} position={[alert.location_lat, alert.location_lng]} icon={alertIcon}>
