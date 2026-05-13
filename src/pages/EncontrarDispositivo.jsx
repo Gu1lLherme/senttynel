@@ -147,7 +147,10 @@ export default function EncontrarDispositivo() {
                     : 'bg-white border-gray-200 hover:border-blue-200'
                 }`}
               >
-                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-black overflow-hidden">
+                <div
+                  className="w-11 h-11 rounded-xl flex items-center justify-center font-black overflow-hidden"
+                  style={{ background: '#1743B8', color: '#FFFFFF' }}
+                >
                   {link.child_photo_url
                     ? <img src={link.child_photo_url} alt={link.child_name} className="w-full h-full object-cover" />
                     : link.child_name?.[0]?.toUpperCase() || '?'}

@@ -10,7 +10,6 @@ const PLANS = [
     id: 'basico',
     name: 'Básico',
     price: 29.90,
-    color: 'blue',
     tagline: 'Proteção essencial individual',
     features: [
       'SOS / Botão de pânico',
@@ -23,7 +22,6 @@ const PLANS = [
     id: 'premium',
     name: 'Premium',
     price: 89.90,
-    color: 'purple',
     highlight: true,
     tagline: 'Para quem quer tudo',
     features: [
@@ -38,7 +36,6 @@ const PLANS = [
     id: 'family',
     name: 'Family',
     price: 149.90,
-    color: 'pink',
     tagline: 'Proteja quem você ama',
     features: [
       'Tudo do Premium',
@@ -82,25 +79,29 @@ export default function Planos() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-pink-50 px-5 pt-8 pb-12">
+    <div className="min-h-screen bg-background px-5 pt-8 pb-12">
       <div className="max-w-5xl mx-auto">
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center gap-1.5 text-muted-foreground text-sm font-medium mb-6 hover:text-foreground"
+          className="flex items-center gap-1.5 text-sm font-medium mb-6 transition-colors"
+          style={{ color: '#607090' }}
         >
           <ArrowLeft size={16} />
           Voltar
         </button>
 
         <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-bold uppercase tracking-widest mb-3">
+          <div
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-3"
+            style={{ background: '#EBF0F8', color: '#1743B8', border: '1px solid #C4D0E5' }}
+          >
             <Shield size={12} />
             Planos SENTINEL
           </div>
-          <h1 className="text-foreground text-3xl sm:text-4xl font-black leading-tight">
-            Escolha sua <span className="bg-gradient-to-r from-blue-600 to-red-500 bg-clip-text text-transparent">proteção</span>
+          <h1 className="font-display text-4xl sm:text-5xl leading-tight" style={{ color: '#0C1A38' }}>
+            Escolha sua proteção
           </h1>
-          <p className="text-muted-foreground text-sm mt-2 max-w-md mx-auto">
+          <p className="text-sm mt-2 max-w-md mx-auto" style={{ color: '#607090' }}>
             Cancele quando quiser. Sem fidelidade. Pagamento seguro via Stripe.
           </p>
         </div>
@@ -116,7 +117,7 @@ export default function Planos() {
           ))}
         </div>
 
-        <div className="mt-8 flex items-center justify-center gap-2 text-xs text-muted-foreground">
+        <div className="mt-8 flex items-center justify-center gap-2 text-xs" style={{ color: '#8A9FC0' }}>
           <Lock size={12} />
           Pagamento processado com segurança pela Stripe · Cartões aceitos: Visa, Mastercard, Elo
         </div>

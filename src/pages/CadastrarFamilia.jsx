@@ -53,7 +53,7 @@ export default function CadastrarFamilia() {
   };
 
   return (
-    <div className="min-h-screen bg-background px-5 pt-14 pb-4">
+    <div className="min-h-screen bg-background px-5 pt-14 pb-24 max-w-md mx-auto">
       <button
         onClick={() => navigate('/familia')}
         className="flex items-center gap-1.5 text-muted-foreground text-sm font-medium mb-4 hover:text-foreground"

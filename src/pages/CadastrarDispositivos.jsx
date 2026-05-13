@@ -29,7 +29,7 @@ export default function CadastrarDispositivos() {
   });
 
   return (
-    <div className="min-h-screen bg-background px-5 pt-14 pb-4">
+    <div className="min-h-screen bg-background px-5 pt-14 pb-24 max-w-md mx-auto">
       <button
         onClick={() => navigate('/familia')}
         className="flex items-center gap-1.5 text-muted-foreground text-sm font-medium mb-4 hover:text-foreground"
@@ -53,16 +53,20 @@ export default function CadastrarDispositivos() {
       {/* Encontrar dispositivo CTA */}
       <button
         onClick={() => navigate('/encontrar-dispositivo')}
-        className="w-full mb-5 p-4 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-800 text-white flex items-center gap-3 shadow-lg shadow-blue-500/20 active:scale-[0.98] transition"
+        className="w-full mb-5 p-4 rounded-2xl flex items-center gap-3 active:scale-[0.98] transition"
+        style={{ background: '#1743B8', color: '#FFFFFF' }}
       >
-        <div className="w-11 h-11 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+        <div
+          className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+          style={{ background: 'rgba(255,255,255,0.15)' }}
+        >
           <Search size={20} className="text-white" />
         </div>
-        <div className="flex-1 text-left">
+        <div className="flex-1 text-left min-w-0">
           <p className="font-bold text-sm">Encontrar dispositivo</p>
-          <p className="text-blue-100 text-xs">Tocar alarme, localizar ou bloquear</p>
+          <p className="text-xs" style={{ color: '#DDE6FA' }}>Tocar alarme, localizar ou bloquear</p>
         </div>
-        <ChevronRight size={18} className="text-white/80" />
+        <ChevronRight size={18} style={{ color: '#DDE6FA' }} className="flex-shrink-0" />
       </button>
 
       {isLoading ? (
@@ -88,7 +92,10 @@ export default function CadastrarDispositivos() {
           {links.map(link => (
             <div key={link.id} className="glass-card rounded-2xl p-4 slide-up">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-black text-lg overflow-hidden flex-shrink-0">
+                <div
+                  className="w-12 h-12 rounded-xl flex items-center justify-center font-display text-xl overflow-hidden flex-shrink-0"
+                  style={{ background: '#1743B8', color: '#FFFFFF' }}
+                >
                   {link.child_photo_url
                     ? <img src={link.child_photo_url} alt={link.child_name} className="w-full h-full object-cover" />
                     : link.child_name?.[0]?.toUpperCase() || '?'}

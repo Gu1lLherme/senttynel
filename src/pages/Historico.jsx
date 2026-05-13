@@ -54,7 +54,7 @@ export default function Historico() {
   const resolvedCount = alerts.filter(a => a.status === 'resolvido').length;
 
   return (
-    <div className="min-h-screen bg-background px-5 pt-14 pb-4">
+    <div className="min-h-screen bg-background px-5 pt-14 pb-24 max-w-md mx-auto">
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center gap-3 mb-1">
@@ -131,13 +131,16 @@ export default function Historico() {
 
                     {alert.risk_score && (
                       <div className="mt-2 flex items-center gap-2">
-                        <div className="flex-1 h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                        <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: '#EBF0F8' }}>
                           <div
-                            className="h-full rounded-full bg-gradient-to-r from-amber-400 to-red-500 transition-all"
-                            style={{ width: `${alert.risk_score}%` }}
+                            className="h-full rounded-full transition-all"
+                            style={{
+                              width: `${alert.risk_score}%`,
+                              background: alert.risk_score >= 70 ? '#A81825' : '#1743B8',
+                            }}
                           />
                         </div>
-                        <span className="text-muted-foreground text-xs flex-shrink-0">
+                        <span className="text-xs flex-shrink-0 font-mono" style={{ color: '#607090' }}>
                           Risco {alert.risk_score}%
                         </span>
                       </div>

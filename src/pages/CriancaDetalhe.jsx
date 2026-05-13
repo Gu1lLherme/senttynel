@@ -115,7 +115,10 @@ export default function CriancaDetalhe() {
       {/* Avatar + nome */}
       <div className="flex flex-col items-center mb-6">
         <div className="relative mb-3">
-          <div className="w-28 h-28 rounded-3xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-black text-4xl overflow-hidden shadow-lg">
+          <div
+            className="w-28 h-28 rounded-2xl flex items-center justify-center font-display text-5xl overflow-hidden"
+            style={{ background: '#1743B8', color: '#FFFFFF' }}
+          >
             {form.child_photo_url
               ? <img src={form.child_photo_url} alt={form.child_name} className="w-full h-full object-cover" />
               : form.child_name?.[0]?.toUpperCase() || '?'}
@@ -239,7 +242,8 @@ export default function CriancaDetalhe() {
       <button
         onClick={handleSave}
         disabled={updateMut.isPending}
-        className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold text-base shadow-lg shadow-blue-500/30 hover:opacity-95 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-60"
+        className="w-full py-4 rounded-xl font-bold text-base hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-60"
+        style={{ background: '#1743B8', color: '#FFFFFF' }}
       >
         {updateMut.isPending ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
         Salvar informações

@@ -44,26 +44,18 @@ export default function Acesso() {
   const isSignup = mode === 'signup';
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-red-50 relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-64 h-64 lg:w-[500px] lg:h-[500px] bg-blue-200/30 rounded-full blur-3xl -translate-y-1/3 translate-x-1/3 pointer-events-none" />
+    <div className="min-h-screen bg-background">
+      <div className="min-h-screen lg:grid lg:grid-cols-2">
+        {/* LEFT: marketing panel (desktop only) — sólido, sem gradientes */}
+        <aside className="hidden lg:flex flex-col justify-between p-12 text-white" style={{ background: '#1743B8' }}>
+          <Logo size="md" showText={false} />
 
-      <div className="relative min-h-screen lg:grid lg:grid-cols-2">
-        {/* LEFT: marketing panel (desktop only) */}
-        <aside className="hidden lg:flex flex-col justify-between p-12 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 text-white relative overflow-hidden">
-          <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-red-500/20 rounded-full blur-3xl" />
-          <div className="absolute top-10 -left-20 w-80 h-80 bg-cyan-400/10 rounded-full blur-3xl" />
-
-          <div className="relative">
-            <Logo size="md" showText={false} />
-          </div>
-
-          <div className="relative space-y-8">
+          <div className="space-y-8">
             <div>
-              <h1 className="text-5xl font-black leading-tight">
-                Proteção que<br />
-                <span className="bg-gradient-to-r from-cyan-200 to-white bg-clip-text text-transparent">não dorme.</span>
+              <h1 className="font-display text-5xl leading-tight text-white">
+                Proteção que<br />não dorme.
               </h1>
-              <p className="text-blue-100 text-lg mt-4 max-w-md leading-relaxed">
+              <p className="text-lg mt-4 max-w-md leading-relaxed" style={{ color: '#DDE6FA' }}>
                 Junte-se a milhares de famílias que confiam no SENTINEL para monitorar e proteger quem importa.
               </p>
             </div>
@@ -75,15 +67,19 @@ export default function Acesso() {
                 { icon: Bell, label: 'Alertas SOS' },
                 { icon: Users, label: 'Controle Parental' },
               ].map(({ icon: Icon, label }) => (
-                <div key={label} className="flex items-center gap-2 p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10">
-                  <Icon size={16} className="text-cyan-200 flex-shrink-0" />
+                <div
+                  key={label}
+                  className="flex items-center gap-2 p-3 rounded-xl"
+                  style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)' }}
+                >
+                  <Icon size={16} className="text-white flex-shrink-0" />
                   <span className="text-sm font-medium">{label}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="relative text-blue-100 text-xs">
+          <div className="text-xs" style={{ color: '#DDE6FA' }}>
             🔐 Criptografia ponta-a-ponta · Privacidade por design
           </div>
         </aside>
@@ -173,7 +169,8 @@ export default function Acesso() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold text-base shadow-lg shadow-blue-500/30 hover:opacity-95 active:scale-[0.98] transition-all mt-2 flex items-center justify-center gap-2 disabled:opacity-60"
+              className="w-full py-4 rounded-2xl text-white font-bold text-base hover:brightness-110 active:scale-[0.98] transition-all mt-2 flex items-center justify-center gap-2 disabled:opacity-60"
+              style={{ background: '#1743B8' }}
             >
               {submitting && <Loader2 size={18} className="animate-spin" />}
               {isSignup ? 'Criar minha conta' : 'Entrar no SENTINEL'}

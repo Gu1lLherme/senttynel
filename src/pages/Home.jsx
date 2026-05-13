@@ -51,17 +51,13 @@ export default function Home() {
     hour < 18 ? 'Boa Tarde' :
     'Boa Noite';
 
-  // Só conta como alerta ATIVO em curso:
-  // 1) Pânico manual (SOS) acionado pelo usuário, ou
-  // 2) Alerta detectado pela IA com severidade alta/crítica
-  // E criado nos últimos 30 minutos (eventos antigos não-resolvidos não devem assustar a tela inicial)
   const THIRTY_MIN = 30 * 60 * 1000;
-  const now = Date.now();
+  const nowTs = Date.now();
   const liveAlert = alerts.find(a => {
-    const age = now - new Date(a.created_date).getTime();
+    const age = nowTs - new Date(a.created_date).getTime();
     if (age > THIRTY_MIN) return false;
-    if (a.type === 'manual') return true; // SOS pelo usuário
-    return a.severity === 'critico' || a.severity === 'alto'; // IA decidiu
+    if (a.type === 'manual') return true;
+    return a.severity === 'critico' || a.severity === 'alto';
   });
   const hasActiveAlert = !!liveAlert;
   const status = hasActiveAlert ? 'perigo' : 'segura';
@@ -128,29 +124,41 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-background px-5 pt-3 pb-24 flex flex-col">
-      {/* Header */}
-      <div className="flex-shrink-0">
-        <p className="text-blue-400 text-xs font-semibold uppercase tracking-widest mb-0.5">
+    <div className="min-h-screen bg-background px-5 pt-6 pb-24 flex flex-col max-w-md mx-auto">
+      {/* Header — tipografia display para saudação */}
+      <header className="flex-shrink-0">
+        <p
+          className="text-[11px] font-semibold uppercase tracking-[0.18em] mb-1"
+          style={{ color: '#1743B8' }}
+        >
           {greeting}
         </p>
-        <h1 className="text-foreground text-2xl font-black leading-tight">
+        <h1
+          className="font-display text-3xl leading-tight"
+          style={{ color: '#0C1A38' }}
+        >
           {user?.full_name?.split(' ')[0] || 'Usuário'}
         </h1>
-        <div className="mt-1.5 flex items-center gap-2">
+        <div className="mt-2">
           <StatusBadge status={status} />
         </div>
-      </div>
+      </header>
 
       {/* Active Alert Banner */}
       {hasActiveAlert && (
-        <div className="flex-shrink-0 mt-3 p-2.5 rounded-xl bg-red-50 border border-red-200 flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
-            <Zap size={14} className="text-red-600" />
+        <div
+          className="flex-shrink-0 mt-4 p-3 rounded-2xl flex items-center gap-2.5"
+          style={{ background: '#FBEAEC', border: '1px solid #F1C5CA' }}
+        >
+          <div
+            className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
+            style={{ background: '#FFFFFF' }}
+          >
+            <Zap size={14} style={{ color: '#A81825' }} />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-red-600 font-bold text-xs">Alerta Ativo</p>
-            <p className="text-red-400 text-xs truncate">
+            <p className="font-bold text-xs" style={{ color: '#A81825' }}>Alerta Ativo</p>
+            <p className="text-xs truncate" style={{ color: '#7A1020' }}>
               {liveAlert?.type === 'manual' ? 'Pânico acionado' :
                liveAlert?.type === 'queda' ? 'Queda detectada' :
                liveAlert?.type === 'imobilidade' ? 'Imobilidade prolongada' :
@@ -161,7 +169,8 @@ export default function Home() {
           <button
             onClick={handleImOk}
             disabled={dismissing}
-            className="flex-shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-emerald-600 text-white text-[11px] font-bold hover:bg-emerald-700 disabled:opacity-60 transition"
+            className="flex-shrink-0 flex items-center gap-1 px-3 py-1.5 rounded-lg text-[11px] font-bold disabled:opacity-60 transition"
+            style={{ background: '#155230', color: '#FFFFFF' }}
           >
             <Check size={12} />
             Estou bem
@@ -169,26 +178,24 @@ export default function Home() {
         </div>
       )}
 
-      {/* SOS Button — fills available space */}
-      <div className="flex-1 flex items-center justify-center min-h-0">
+      {/* SOS Button — sólido, sem gradiente, com borda inferior #7A1020 */}
+      <div className="flex-1 flex items-center justify-center min-h-0 py-6">
         <button
           onClick={handleSOSTap}
           className={`
-            aspect-square w-full max-w-[16rem] rounded-3xl flex flex-col items-center justify-center cursor-pointer select-none
-            transition-all duration-200 active:scale-95
-            ${sosStep === 1
-              ? 'bg-gradient-to-br from-orange-500 to-red-600 animate-pulse'
-              : 'bg-gradient-to-br from-red-500 to-red-700 hover:brightness-105'
-            }
+            aspect-square w-full max-w-[16rem] flex flex-col items-center justify-center cursor-pointer select-none
+            transition-transform duration-150 active:scale-[0.97]
+            ${sosStep === 1 ? 'animate-pulse' : ''}
           `}
           style={{
-            boxShadow: sosStep === 1
-              ? '0 0 0 6px rgba(249,115,22,0.3), 0 12px 40px rgba(220,38,38,0.5)'
-              : '0 0 0 4px rgba(220,38,38,0.1), 0 8px 30px rgba(220,38,38,0.3)'
+            background: '#A81825',
+            borderRadius: 18,
+            borderBottom: '1px solid #7A1020',
+            color: '#FFFFFF',
           }}
         >
-          <span className="text-white font-black text-4xl tracking-widest">SOS</span>
-          <span className="text-white/80 text-xs font-semibold mt-1.5">
+          <span className="font-display text-5xl tracking-[0.18em]">SOS</span>
+          <span className="text-xs font-semibold tracking-[0.18em] mt-2 text-white/90">
             {sosStep === 0 ? 'EMERGÊNCIA' : 'TOQUE PARA CONFIRMAR'}
           </span>
         </button>
@@ -196,50 +203,42 @@ export default function Home() {
 
       {/* Bottom controls */}
       <div className="flex-shrink-0 grid grid-cols-2 gap-3">
-        {/* GPS */}
-        <button
-          onClick={toggleGps}
-          className={`glass-card rounded-2xl p-3 flex items-center gap-3 cursor-pointer transition-all duration-200 active:scale-[0.97] ${
-            gpsActive ? 'ring-2 ring-blue-400' : ''
-          }`}
-        >
-          <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${gpsActive ? 'bg-blue-500' : 'bg-gray-100'}`}>
-            <MapPin size={20} className={gpsActive ? 'text-white' : 'text-gray-400'} />
-          </div>
-          <div className="flex-1 min-w-0 text-left">
-            <p className="text-foreground font-semibold text-sm">GPS</p>
-            <p className={`text-xs font-medium ${gpsActive ? 'text-blue-600' : 'text-gray-400'}`}>
-              {gpsActive ? 'Ativo' : 'Inativo'}
-            </p>
-          </div>
-        </button>
-
-        {/* Corrida */}
-        <button
+        <ControlTile active={gpsActive} onClick={toggleGps} label="GPS" icon={MapPin} />
+        <ControlTile
+          active={running}
           onClick={() => setRunning(!running)}
-          className={`glass-card rounded-2xl p-3 flex items-center gap-3 cursor-pointer transition-all duration-200 active:scale-[0.97] ${
-            running ? 'ring-2 ring-blue-400' : ''
-          }`}
-        >
-          <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${running ? 'bg-blue-500' : 'bg-gray-100'}`}>
-            {running
-              ? <Square size={18} className="text-white" />
-              : <Play size={18} className="text-gray-400 ml-0.5" />
-            }
-          </div>
-          <div className="flex-1 min-w-0 text-left">
-            <p className="text-foreground font-semibold text-sm">Corrida</p>
-            <p className={`text-xs font-medium ${running ? 'text-blue-600' : 'text-gray-400'}`}>
-              {running ? 'Ativo' : 'Inativo'}
-            </p>
-          </div>
-        </button>
+          label="Corrida"
+          icon={running ? Square : Play}
+        />
       </div>
 
-      {/* SOS Modal */}
-      {sosActive && (
-        <SOSModal contacts={contacts} onClose={handleSOSClose} />
-      )}
+      {sosActive && <SOSModal contacts={contacts} onClose={handleSOSClose} />}
     </div>
+  );
+}
+
+function ControlTile({ active, onClick, label, icon: Icon }) {
+  return (
+    <button
+      onClick={onClick}
+      className="rounded-2xl p-3 flex items-center gap-3 cursor-pointer active:scale-[0.97] transition-transform"
+      style={{
+        background: '#FFFFFF',
+        border: `1px solid ${active ? '#1743B8' : '#C4D0E5'}`,
+      }}
+    >
+      <div
+        className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+        style={{ background: active ? '#1743B8' : '#EBF0F8' }}
+      >
+        <Icon size={18} style={{ color: active ? '#FFFFFF' : '#1743B8' }} />
+      </div>
+      <div className="flex-1 min-w-0 text-left">
+        <p className="font-semibold text-sm" style={{ color: '#0C1A38' }}>{label}</p>
+        <p className="text-xs font-medium" style={{ color: active ? '#1743B8' : '#8A9FC0' }}>
+          {active ? 'Ativo' : 'Inativo'}
+        </p>
+      </div>
+    </button>
   );
 }

@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import {
-  Settings, Bell, Shield, LayoutDashboard, ChevronRight, LogOut, CreditCard, Sparkles,
+  Settings, Bell, Shield, LayoutDashboard, ChevronRight, LogOut, CreditCard,
 } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import PushPermissionCard from '@/components/sentinel/PushPermissionCard';
@@ -18,13 +18,10 @@ export default function Configuracoes() {
   });
 
   const isAdmin = me?.role === 'admin' || me?.role === 'owner';
-
-  const handleLogout = () => {
-    base44.auth.logout('/');
-  };
+  const handleLogout = () => base44.auth.logout('/');
 
   return (
-    <div className="min-h-screen bg-background px-5 pt-14 pb-4 max-w-md mx-auto">
+    <div className="min-h-screen bg-background px-5 pt-14 pb-24 max-w-md mx-auto">
       <PageHeader
         icon={Settings}
         label="Sistema"
@@ -34,42 +31,42 @@ export default function Configuracoes() {
 
       <NavCard
         onClick={() => navigate('/planos')}
-        gradient="from-pink-500 via-purple-600 to-blue-700"
-        shadow="shadow-purple-500/20"
         icon={CreditCard}
         title="Planos & Assinatura"
         subtitle="Básico, Premium e Family"
-        badge={<Sparkles size={12} className="text-yellow-200" />}
       />
 
       {isAdmin && (
         <NavCard
           onClick={() => navigate('/administrativo/dashboard')}
-          gradient="from-blue-600 to-blue-800"
-          shadow="shadow-blue-500/20"
           icon={LayoutDashboard}
           title="Dashboard Administrativo"
           subtitle="Métricas, alertas e relatórios"
         />
       )}
 
-      <Section icon={Shield} iconColor="text-blue-600" title="Status dos Sensores">
-        <div className="space-y-2.5">
+      <Section icon={Shield} title="Status dos Sensores">
+        <div className="space-y-2">
           {[
-            { name: 'Acelerômetro', desc: 'Detecta quedas e impactos', icon: '📡' },
-            { name: 'GPS / Localização', desc: 'Rastreamento em tempo real', icon: '📍' },
-            { name: 'Botão de Pânico', desc: 'Acionamento manual SOS', icon: '🆘' },
+            { name: 'Acelerômetro', desc: 'Detecta quedas e impactos' },
+            { name: 'GPS / Localização', desc: 'Rastreamento em tempo real' },
+            { name: 'Botão de Pânico', desc: 'Acionamento manual SOS' },
           ].map(sensor => (
-            <div key={sensor.name} className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 border border-gray-100">
-              <span className="text-xl flex-shrink-0">{sensor.icon}</span>
+            <div
+              key={sensor.name}
+              className="flex items-center gap-3 p-3 rounded-xl"
+              style={{ background: '#EBF0F8', border: '1px solid #C4D0E5' }}
+            >
               <div className="flex-1 min-w-0">
-                <p className="text-foreground font-semibold text-sm truncate">{sensor.name}</p>
-                <p className="text-muted-foreground text-xs truncate">{sensor.desc}</p>
+                <p className="font-semibold text-sm truncate" style={{ color: '#0C1A38' }}>{sensor.name}</p>
+                <p className="text-xs truncate" style={{ color: '#607090' }}>{sensor.desc}</p>
               </div>
-              <div className="flex items-center gap-1.5 flex-shrink-0">
-                <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-                <span className="text-blue-600 text-xs font-medium">Ativo</span>
-              </div>
+              <span
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold flex-shrink-0"
+                style={{ background: '#DDF0E6', color: '#155230' }}
+              >
+                Ativo
+              </span>
             </div>
           ))}
         </div>
@@ -79,7 +76,7 @@ export default function Configuracoes() {
         <PushPermissionCard />
       </div>
 
-      <Section icon={Bell} iconColor="text-red-600" title="Alertas">
+      <Section icon={Bell} title="Alertas">
         <div className="space-y-3">
           {[
             { label: 'Perguntar "Está tudo bem?"', desc: 'Quando detectar anomalia média', defaultOn: true },
@@ -88,8 +85,8 @@ export default function Configuracoes() {
           ].map(item => (
             <div key={item.label} className="flex items-center gap-3">
               <div className="flex-1 min-w-0">
-                <p className="text-foreground font-semibold text-sm truncate">{item.label}</p>
-                <p className="text-muted-foreground text-xs truncate">{item.desc}</p>
+                <p className="font-semibold text-sm truncate" style={{ color: '#0C1A38' }}>{item.label}</p>
+                <p className="text-xs truncate" style={{ color: '#607090' }}>{item.desc}</p>
               </div>
               <Switch defaultChecked={item.defaultOn} />
             </div>
@@ -100,16 +97,20 @@ export default function Configuracoes() {
       {me && (
         <button
           onClick={handleLogout}
-          className="w-full p-3 rounded-2xl bg-white border border-gray-200 flex items-center justify-center gap-2 text-red-600 font-semibold text-sm hover:bg-red-50 transition-colors mb-4"
+          className="w-full p-3 rounded-2xl flex items-center justify-center gap-2 font-semibold text-sm transition-colors mb-4"
+          style={{ background: '#FFFFFF', border: '1px solid #C4D0E5', color: '#A81825' }}
         >
           <LogOut size={15} />
           Sair da conta
         </button>
       )}
 
-      <div className="p-3 rounded-2xl bg-blue-50 border border-blue-100">
-        <p className="text-blue-700 text-xs font-semibold mb-1">🔐 Privacidade por Design</p>
-        <p className="text-blue-600/70 text-xs leading-relaxed">
+      <div
+        className="p-3 rounded-2xl"
+        style={{ background: '#FFFFFF', border: '1px solid #C4D0E5' }}
+      >
+        <p className="text-xs font-semibold mb-1" style={{ color: '#0C1A38' }}>🔐 Privacidade por Design</p>
+        <p className="text-xs leading-relaxed" style={{ color: '#607090' }}>
           Todo processamento primário acontece no dispositivo. Dados brutos não são enviados para a nuvem.
         </p>
       </div>
@@ -117,35 +118,39 @@ export default function Configuracoes() {
   );
 }
 
-function Section({ icon: Icon, iconColor, title, children }) {
+function Section({ icon: Icon, title, children }) {
   return (
-    <div className="glass-card rounded-2xl p-4 mb-4">
-      <div className="flex items-center gap-2.5 mb-3.5">
-        <Icon size={16} className={iconColor} />
-        <h2 className="text-foreground font-bold text-sm">{title}</h2>
+    <div
+      className="rounded-2xl p-4 mb-4"
+      style={{ background: '#FFFFFF', border: '1px solid #C4D0E5' }}
+    >
+      <div className="flex items-center gap-2 mb-3.5">
+        <Icon size={16} style={{ color: '#1743B8' }} />
+        <h2 className="font-bold text-sm" style={{ color: '#0C1A38' }}>{title}</h2>
       </div>
       {children}
     </div>
   );
 }
 
-function NavCard({ onClick, gradient, shadow, icon: Icon, title, subtitle, badge }) {
+function NavCard({ onClick, icon: Icon, title, subtitle }) {
   return (
     <button
       onClick={onClick}
-      className={`w-full mb-3 p-4 rounded-2xl bg-gradient-to-br ${gradient} text-white flex items-center gap-3 shadow-lg ${shadow} active:scale-[0.98] transition-all`}
+      className="w-full mb-3 p-4 rounded-2xl flex items-center gap-3 active:scale-[0.98] transition-all"
+      style={{ background: '#FFFFFF', border: '1px solid #C4D0E5' }}
     >
-      <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center flex-shrink-0">
-        <Icon size={18} className="text-white" />
+      <div
+        className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+        style={{ background: '#EBF0F8' }}
+      >
+        <Icon size={18} style={{ color: '#1743B8' }} />
       </div>
       <div className="flex-1 text-left min-w-0">
-        <div className="flex items-center gap-1.5">
-          <p className="font-bold text-sm truncate">{title}</p>
-          {badge}
-        </div>
-        <p className="text-white/90 text-xs truncate">{subtitle}</p>
+        <p className="font-bold text-sm truncate" style={{ color: '#0C1A38' }}>{title}</p>
+        <p className="text-xs truncate" style={{ color: '#607090' }}>{subtitle}</p>
       </div>
-      <ChevronRight size={18} className="text-white/80 flex-shrink-0" />
+      <ChevronRight size={18} style={{ color: '#8A9FC0' }} className="flex-shrink-0" />
     </button>
   );
 }

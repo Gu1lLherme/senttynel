@@ -20,36 +20,38 @@ export default function BemVindo() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-red-50 relative overflow-hidden">
-      {/* Background decorations */}
-      <div className="absolute top-0 right-0 w-72 h-72 md:w-[600px] md:h-[600px] bg-blue-200/30 rounded-full blur-3xl -translate-y-1/3 translate-x-1/3 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-72 h-72 md:w-[500px] md:h-[500px] bg-red-200/20 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3 pointer-events-none" />
-
-      {/* MOBILE LAYOUT (default) */}
-      <div className="lg:hidden relative min-h-screen px-6 py-10 flex flex-col max-w-md mx-auto">
-        <div className="flex-shrink-0 flex justify-center pt-8">
+    <div className="min-h-screen bg-background">
+      {/* MOBILE LAYOUT */}
+      <div className="lg:hidden min-h-screen px-6 py-10 flex flex-col max-w-md mx-auto">
+        <div className="flex-shrink-0 flex justify-center pt-4">
           <Logo size="xl" />
         </div>
 
         <div className="flex-shrink-0 text-center mt-8 mb-8">
-          <h2 className="text-3xl font-black text-foreground leading-tight">
-            Sua segurança em<br />
-            <span className="bg-gradient-to-r from-blue-600 to-red-500 bg-clip-text text-transparent">primeiro lugar</span>
+          <h2 className="font-display text-4xl leading-tight" style={{ color: '#0C1A38' }}>
+            Sua segurança<br />em primeiro lugar
           </h2>
-          <p className="text-muted-foreground text-sm mt-3 max-w-xs mx-auto">
+          <p className="text-sm mt-3 max-w-xs mx-auto" style={{ color: '#607090' }}>
             Monitoramento inteligente, alertas em tempo real e proteção para você e sua família.
           </p>
         </div>
 
         <div className="flex-1 grid grid-cols-2 gap-3 mb-8">
           {features.map(({ icon: Icon, label, desc }) => (
-            <div key={label} className="glass-card rounded-2xl p-4 flex flex-col items-start gap-2">
-              <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
-                <Icon size={18} className="text-blue-600" />
+            <div
+              key={label}
+              className="rounded-2xl p-4 flex flex-col items-start gap-2"
+              style={{ background: '#FFFFFF', border: '1px solid #C4D0E5' }}
+            >
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center"
+                style={{ background: '#EBF0F8' }}
+              >
+                <Icon size={18} style={{ color: '#1743B8' }} />
               </div>
               <div>
-                <p className="text-foreground font-bold text-sm">{label}</p>
-                <p className="text-muted-foreground text-xs">{desc}</p>
+                <p className="font-bold text-sm" style={{ color: '#0C1A38' }}>{label}</p>
+                <p className="text-xs" style={{ color: '#607090' }}>{desc}</p>
               </div>
             </div>
           ))}
@@ -58,41 +60,42 @@ export default function BemVindo() {
         <div className="flex-shrink-0 space-y-3">
           <button
             onClick={() => navigate('/acesso?mode=signup')}
-            className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold text-base flex items-center justify-center gap-2 shadow-lg shadow-blue-500/30 hover:opacity-95 active:scale-[0.98] transition-all"
+            className="w-full py-4 rounded-2xl font-bold text-base flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
+            style={{ background: '#1743B8', color: '#FFFFFF' }}
           >
             Começar agora
             <ArrowRight size={18} />
           </button>
           <button
             onClick={() => navigate('/acesso?mode=signin')}
-            className="w-full py-3.5 rounded-2xl bg-white border border-gray-200 text-foreground font-semibold text-sm hover:bg-gray-50 active:scale-[0.98] transition-all"
+            className="w-full py-3.5 rounded-2xl font-semibold text-sm active:scale-[0.98] transition-all"
+            style={{ background: '#FFFFFF', border: '1px solid #C4D0E5', color: '#0C1A38' }}
           >
             Já tenho conta
           </button>
-          <p className="text-center text-xs text-muted-foreground pt-2">
-            🔐 Privacidade por design • Dados locais
+          <p className="text-center text-xs pt-2" style={{ color: '#8A9FC0' }}>
+            🔐 Privacidade por design · Dados locais
           </p>
         </div>
       </div>
 
-      {/* DESKTOP LAYOUT (lg+) */}
-      <div className="hidden lg:flex relative min-h-screen max-w-7xl mx-auto px-12 py-10 items-center">
+      {/* DESKTOP LAYOUT */}
+      <div className="hidden lg:flex min-h-screen max-w-7xl mx-auto px-12 py-10 items-center">
         <div className="grid grid-cols-2 gap-16 w-full items-center">
-          {/* Left: hero */}
           <div className="space-y-8">
             <div className="flex items-center gap-3">
               <Logo size="md" showText={false} />
               <div>
-                <h1 className="text-2xl font-black tracking-tight bg-gradient-to-r from-blue-600 via-blue-500 to-red-500 bg-clip-text text-transparent">SENTINEL</h1>
-                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">Proteção Inteligente</p>
+                <h1 className="font-display text-2xl tracking-tight" style={{ color: '#0C1A38' }}>SENTINEL</h1>
+                <p className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: '#607090' }}>Proteção Inteligente</p>
               </div>
             </div>
 
             <div>
-              <h2 className="text-6xl font-black text-foreground leading-[1.05]">
-                Sua segurança<br />em <span className="bg-gradient-to-r from-blue-600 to-red-500 bg-clip-text text-transparent">primeiro lugar</span>
+              <h2 className="font-display text-6xl leading-[1.05]" style={{ color: '#0C1A38' }}>
+                Sua segurança<br />em primeiro lugar
               </h2>
-              <p className="text-lg text-muted-foreground mt-6 max-w-lg leading-relaxed">
+              <p className="text-lg mt-6 max-w-lg leading-relaxed" style={{ color: '#607090' }}>
                 Monitoramento inteligente, alertas em tempo real e proteção para você e sua família.
                 O SENTINEL transforma seu smartphone em um segurança pessoal 24/7.
               </p>
@@ -101,38 +104,43 @@ export default function BemVindo() {
             <div className="flex gap-3">
               <button
                 onClick={() => navigate('/acesso?mode=signup')}
-                className="px-8 py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold flex items-center gap-2 shadow-lg shadow-blue-500/30 hover:opacity-95 active:scale-[0.98] transition-all"
+                className="px-8 py-4 rounded-2xl font-bold flex items-center gap-2 active:scale-[0.98] transition-all"
+                style={{ background: '#1743B8', color: '#FFFFFF' }}
               >
                 Começar agora
                 <ArrowRight size={18} />
               </button>
               <button
                 onClick={() => navigate('/acesso?mode=signin')}
-                className="px-8 py-4 rounded-2xl bg-white border border-gray-200 text-foreground font-semibold hover:bg-gray-50 active:scale-[0.98] transition-all"
+                className="px-8 py-4 rounded-2xl font-semibold active:scale-[0.98] transition-all"
+                style={{ background: '#FFFFFF', border: '1px solid #C4D0E5', color: '#0C1A38' }}
               >
                 Já tenho conta
               </button>
             </div>
 
-            <div className="flex items-center gap-6 pt-4 text-sm text-muted-foreground">
-              <span className="flex items-center gap-2">🔐 Criptografia ponta-a-ponta</span>
-              <span className="flex items-center gap-2">🛡️ Privacidade por design</span>
+            <div className="flex items-center gap-6 pt-4 text-sm" style={{ color: '#607090' }}>
+              <span>🔐 Criptografia ponta-a-ponta</span>
+              <span>🛡️ Privacidade por design</span>
             </div>
           </div>
 
-          {/* Right: features grid */}
           <div className="grid grid-cols-2 gap-4">
-            {desktopFeatures.map(({ icon: Icon, label, desc }, idx) => (
+            {desktopFeatures.map(({ icon: Icon, label, desc }) => (
               <div
                 key={label}
-                className={`glass-card rounded-3xl p-6 flex flex-col gap-3 hover:shadow-xl transition-all ${idx % 2 === 0 ? 'translate-y-4' : ''}`}
+                className="rounded-2xl p-6 flex flex-col gap-3"
+                style={{ background: '#FFFFFF', border: '1px solid #C4D0E5' }}
               >
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-lg shadow-blue-500/20">
-                  <Icon size={22} className="text-white" />
+                <div
+                  className="w-12 h-12 rounded-xl flex items-center justify-center"
+                  style={{ background: '#EBF0F8' }}
+                >
+                  <Icon size={22} style={{ color: '#1743B8' }} />
                 </div>
                 <div>
-                  <p className="text-foreground font-bold text-base">{label}</p>
-                  <p className="text-muted-foreground text-sm mt-1 leading-relaxed">{desc}</p>
+                  <p className="font-bold text-base" style={{ color: '#0C1A38' }}>{label}</p>
+                  <p className="text-sm mt-1 leading-relaxed" style={{ color: '#607090' }}>{desc}</p>
                 </div>
               </div>
             ))}
