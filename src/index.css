@@ -85,6 +85,57 @@
     from { transform: translateY(20px); opacity: 0; }
     to   { transform: translateY(0); opacity: 1; }
   }
+
+  /* === SENTINEL — Transições globais === */
+
+  /* Card branco com elevação suave no hover */
+  .card-interactive {
+    transition: transform 300ms ease, box-shadow 300ms ease, border-color 300ms ease, background-color 300ms ease;
+    will-change: transform;
+  }
+  .card-interactive:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(23, 67, 184, 0.12), 0 4px 10px rgba(23, 67, 184, 0.06);
+    border-color: #1743B8 !important;
+  }
+
+  /* Inversão branco ↔ azul no hover (botões secundários, cards clicáveis, nav items)
+     Aplicar em elementos com bg branco + texto azul. */
+  .hover-invert {
+    background-color: #FFFFFF;
+    color: #1743B8;
+    border: 1px solid #C4D0E5;
+    transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease, box-shadow 300ms ease, transform 300ms ease;
+  }
+  .hover-invert:hover {
+    background-color: #1743B8;
+    color: #FFFFFF;
+    border-color: #1743B8;
+    box-shadow: 0 8px 20px rgba(23, 67, 184, 0.25);
+  }
+  .hover-invert:hover svg { color: #FFFFFF !important; }
+
+  /* Botão primário azul → mantém azul, ganha sombra/leve subida */
+  .btn-primary-fx {
+    transition: transform 300ms ease, box-shadow 300ms ease, background-color 300ms ease;
+  }
+  .btn-primary-fx:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px rgba(23, 67, 184, 0.3);
+  }
+  .btn-primary-fx:active {
+    transform: translateY(0);
+  }
+
+  /* Transição base para qualquer botão/link interativo */
+  .fx-smooth {
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/* Suaviza transições padrão de cor em todos os botões e links nativos */
+button, a {
+  transition: color 200ms ease, background-color 200ms ease, border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
 }
 
 /* Leaflet z-index fixes */
