@@ -5,11 +5,11 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        display: ['DM Serif Display', 'Lora', 'serif'],
-        body: ['Sora', 'Plus Jakarta Sans', 'sans-serif'],
+        display: ['Roboto', 'Plus Jakarta Sans', 'sans-serif'],
+        body: ['Open Sans', 'Plus Jakarta Sans', 'sans-serif'],
         mono: ['JetBrains Mono', 'IBM Plex Mono', 'monospace'],
         // back-compat
-        inter: ['Sora', 'Plus Jakarta Sans', 'sans-serif'],
+        inter: ['Open Sans', 'Plus Jakarta Sans', 'sans-serif'],
       },
       borderRadius: {
         lg: 'var(--radius)',
