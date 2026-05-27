@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Shield, MapPin, Bell, Users, ArrowRight, Heart, Smartphone, Brain, Sparkles } from 'lucide-react';
+import { Shield, MapPin, Bell, Users, ArrowRight, Heart, Smartphone, Brain } from 'lucide-react';
 import Logo from '@/components/sentinel/Logo';
 
 const features = [
@@ -13,7 +13,7 @@ const desktopFeatures = [
   { icon: Brain, label: 'IA Contextual', desc: 'Agente analisa sensores e classifica seu estado em tempo real' },
   { icon: Smartphone, label: 'Encontrar Dispositivo', desc: 'Toque alarme, localize ou bloqueie remotamente' },
   { icon: Heart, label: 'Perfil de Saúde', desc: 'Tipo sanguíneo, alergias e medicações em um QR de resgate' },
-  { icon: Sparkles, label: 'Cercas inteligentes', desc: 'Saiba quando família chega ou sai de locais críticos' },
+  { icon: MapPin, label: 'Cercas inteligentes', desc: 'Saiba quando família chega ou sai de locais críticos' },
 ];
 
 export default function BemVindo() {
@@ -40,14 +40,14 @@ export default function BemVindo() {
           {features.map(({ icon: Icon, label, desc }) => (
             <div
               key={label}
-              className="rounded-2xl p-4 flex flex-col items-start gap-2"
+              className="rounded-2xl p-4 flex flex-col items-start gap-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-900/10 hover:border-blue-300"
               style={{ background: '#FFFFFF', border: '1px solid #C4D0E5' }}
             >
               <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center"
-                style={{ background: '#EBF0F8' }}
+                className="w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+                style={{ background: '#1743B8' }}
               >
-                <Icon size={18} style={{ color: '#1743B8' }} />
+                <Icon size={18} style={{ color: '#FFFFFF' }} strokeWidth={2.25} />
               </div>
               <div>
                 <p className="font-bold text-sm" style={{ color: '#0C1A38' }}>{label}</p>
@@ -60,15 +60,15 @@ export default function BemVindo() {
         <div className="flex-shrink-0 space-y-3">
           <button
             onClick={() => navigate('/acesso?mode=signup')}
-            className="w-full py-4 rounded-2xl font-bold text-base flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
+            className="group w-full py-4 rounded-2xl font-bold text-base flex items-center justify-center gap-2 active:scale-[0.98] transition-all duration-300 hover:shadow-xl hover:shadow-blue-900/25 hover:-translate-y-0.5"
             style={{ background: '#1743B8', color: '#FFFFFF' }}
           >
             Começar agora
-            <ArrowRight size={18} />
+            <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
           </button>
           <button
             onClick={() => navigate('/acesso?mode=signin')}
-            className="w-full py-3.5 rounded-2xl font-semibold text-sm active:scale-[0.98] transition-all"
+            className="w-full py-3.5 rounded-2xl font-semibold text-sm active:scale-[0.98] transition-all duration-300 hover:border-blue-300 hover:shadow-md"
             style={{ background: '#FFFFFF', border: '1px solid #C4D0E5', color: '#0C1A38' }}
           >
             Já tenho conta
@@ -104,15 +104,15 @@ export default function BemVindo() {
             <div className="flex gap-3">
               <button
                 onClick={() => navigate('/acesso?mode=signup')}
-                className="px-8 py-4 rounded-2xl font-bold flex items-center gap-2 active:scale-[0.98] transition-all"
+                className="group px-8 py-4 rounded-2xl font-bold flex items-center gap-2 active:scale-[0.98] transition-all duration-300 hover:shadow-xl hover:shadow-blue-900/25 hover:-translate-y-0.5"
                 style={{ background: '#1743B8', color: '#FFFFFF' }}
               >
                 Começar agora
-                <ArrowRight size={18} />
+                <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
               </button>
               <button
                 onClick={() => navigate('/acesso?mode=signin')}
-                className="px-8 py-4 rounded-2xl font-semibold active:scale-[0.98] transition-all"
+                className="px-8 py-4 rounded-2xl font-semibold active:scale-[0.98] transition-all duration-300 hover:border-blue-300 hover:shadow-md"
                 style={{ background: '#FFFFFF', border: '1px solid #C4D0E5', color: '#0C1A38' }}
               >
                 Já tenho conta
@@ -129,14 +129,14 @@ export default function BemVindo() {
             {desktopFeatures.map(({ icon: Icon, label, desc }) => (
               <div
                 key={label}
-                className="rounded-2xl p-6 flex flex-col gap-3"
+                className="group rounded-2xl p-6 flex flex-col gap-3 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-blue-900/10 hover:border-blue-300 cursor-default"
                 style={{ background: '#FFFFFF', border: '1px solid #C4D0E5' }}
               >
                 <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center"
-                  style={{ background: '#EBF0F8' }}
+                  className="w-12 h-12 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3"
+                  style={{ background: '#1743B8' }}
                 >
-                  <Icon size={22} style={{ color: '#1743B8' }} />
+                  <Icon size={22} style={{ color: '#FFFFFF' }} strokeWidth={2.25} />
                 </div>
                 <div>
                   <p className="font-bold text-base" style={{ color: '#0C1A38' }}>{label}</p>
