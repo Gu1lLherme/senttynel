@@ -48,5 +48,14 @@
       "format": "date-time",
       "description": "\u00daltima atividade do dispositivo"
     }
-  }
+  },
+  "required": [
+    "phone",
+    "linked_parent_email",
+    "battery_level",
+    "last_location_lat",
+    "last_location_lng",
+    "last_location_address",
+    "last_seen"
+  ]
 }

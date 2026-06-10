@@ -1,0 +1,72 @@
+{
+  "name": "Alert",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "queda",
+        "panico",
+        "imobilidade",
+        "rota_desviada",
+        "manual"
+      ],
+      "description": "Tipo de alerta detectado"
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "baixo",
+        "medio",
+        "alto",
+        "critico"
+      ],
+      "description": "N\u00edvel de severidade"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ativo",
+        "resolvido",
+        "falso_positivo"
+      ],
+      "default": "ativo"
+    },
+    "location_lat": {
+      "type": "number",
+      "description": "Latitude da localiza\u00e7\u00e3o quando o alerta foi gerado"
+    },
+    "location_lng": {
+      "type": "number",
+      "description": "Longitude da localiza\u00e7\u00e3o quando o alerta foi gerado"
+    },
+    "location_address": {
+      "type": "string",
+      "description": "Endere\u00e7o aproximado"
+    },
+    "contacts_notified": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "IDs dos contatos notificados"
+    },
+    "user_responded": {
+      "type": "boolean",
+      "default": false,
+      "description": "Se o usu\u00e1rio respondeu ao alerta"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Observa\u00e7\u00f5es adicionais"
+    },
+    "risk_score": {
+      "type": "number",
+      "description": "Score de risco de 0 a 100"
+    }
+  },
+  "required": [
+    "type",
+    "severity"
+  ]
+}

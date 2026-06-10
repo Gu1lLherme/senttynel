@@ -1,0 +1,42 @@
+{
+  "name": "Contact",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome do contato de confian\u00e7a"
+    },
+    "phone": {
+      "type": "string",
+      "description": "N\u00famero de telefone"
+    },
+    "relationship": {
+      "type": "string",
+      "enum": [
+        "familiar",
+        "amigo",
+        "colega",
+        "parceiro",
+        "outro"
+      ],
+      "description": "Tipo de relacionamento"
+    },
+    "priority": {
+      "type": "integer",
+      "description": "Prioridade de notifica\u00e7\u00e3o (1 = primeiro a ser notificado)"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Se o contato est\u00e1 ativo para receber alertas"
+    },
+    "avatar_color": {
+      "type": "string",
+      "description": "Cor do avatar"
+    }
+  },
+  "required": [
+    "name",
+    "phone"
+  ]
+}
