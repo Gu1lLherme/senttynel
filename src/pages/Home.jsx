@@ -4,9 +4,10 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Zap, MapPin, Play, Square, Check } from 'lucide-react';
 import StatusBadge from '@/components/sentinel/StatusBadge';
 import SOSModal from '@/components/sentinel/SOSModal';
+import { useAuth } from '@/lib/AuthContext';
 
 export default function Home() {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [sosActive, setSosActive] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [running, setRunning] = useState(false);
@@ -16,7 +17,6 @@ export default function Home() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
     const timer = setInterval(() => setCurrentTime(new Date()), 60000);
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(

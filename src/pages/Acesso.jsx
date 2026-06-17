@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { base44 } from '@/api/base44Client';
+import { useAuth } from '@/lib/AuthContext';
 import { Mail, Lock, User as UserIcon, ArrowLeft, Eye, EyeOff, Loader2, Shield, MapPin, Bell, Users } from 'lucide-react';
 import Logo from '@/components/sentinel/Logo';
 import { useToast } from '@/components/ui/use-toast';
 
 export default function Acesso() {
   const navigate = useNavigate();
+  const { login, isAuthenticated } = useAuth();
   const [searchParams] = useSearchParams();
   const initialMode = searchParams.get('mode') === 'signin' ? 'signin' : 'signup';
   const [mode, setMode] = useState(initialMode);
@@ -16,29 +17,18 @@ export default function Acesso() {
   const { toast } = useToast();
 
   useEffect(() => {
-    base44.auth.isAuthenticated().then(authed => {
-      if (authed) navigate('/app');
-    }).catch(() => {});
-  }, [navigate]);
+    if (isAuthenticated) navigate('/app');
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.email || !form.password) {
-      toast({ title: 'Preencha email e senha', variant: 'destructive' });
-      return;
-    }
-    if (mode === 'signup' && !form.name) {
-      toast({ title: 'Informe seu nome', variant: 'destructive' });
-      return;
-    }
+    // Login fictício — aceita qualquer usuário, sem validação real.
     setSubmitting(true);
-    try {
-      sessionStorage.setItem('sentinel_pending_profile', JSON.stringify({ name: form.name, mode }));
-      base44.auth.redirectToLogin('/app');
-    } catch (err) {
-      toast({ title: 'Erro ao acessar', description: err.message, variant: 'destructive' });
-      setSubmitting(false);
-    }
+    login({
+      name: form.name || (form.email ? form.email.split('@')[0] : 'Usuário de Teste'),
+      email: form.email || 'teste@sentinel.app',
+    });
+    navigate('/app');
   };
 
   const isSignup = mode === 'signup';

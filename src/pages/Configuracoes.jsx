@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { base44 } from '@/api/base44Client';
-import { useQuery } from '@tanstack/react-query';
+import { useAuth } from '@/lib/AuthContext';
 import {
   Settings, Bell, Shield, LayoutDashboard, ChevronRight, LogOut, CreditCard,
 } from 'lucide-react';
@@ -10,15 +9,10 @@ import PageHeader from '@/components/sentinel/PageHeader';
 
 export default function Configuracoes() {
   const navigate = useNavigate();
-
-  const { data: me } = useQuery({
-    queryKey: ['me'],
-    queryFn: () => base44.auth.me(),
-    retry: false,
-  });
+  const { user: me, logout } = useAuth();
 
   const isAdmin = me?.role === 'admin' || me?.role === 'owner';
-  const handleLogout = () => base44.auth.logout('/');
+  const handleLogout = () => logout();
 
   return (
     <div className="min-h-screen bg-background px-5 pt-14 pb-24 max-w-md mx-auto">
