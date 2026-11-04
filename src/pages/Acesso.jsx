@@ -27,6 +27,7 @@ export default function Acesso() {
     login({
       name: form.name || (form.email ? form.email.split('@')[0] : 'Usuário de Teste'),
       email: form.email || 'teste@sentinel.app',
+      role: 'admin',
     });
     navigate('/app');
   };
@@ -34,7 +35,7 @@ export default function Acesso() {
   const isSignup = mode === 'signup';
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background fx-page">
       <div className="min-h-screen lg:grid lg:grid-cols-2">
         {/* LEFT: marketing panel (desktop only) — sólido, sem gradientes */}
         <aside className="hidden lg:flex flex-col justify-between p-12 text-white" style={{ background: '#1743B8' }}>
@@ -50,7 +51,7 @@ export default function Acesso() {
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 max-w-md">
+            <div className="grid grid-cols-2 gap-3 max-w-md fx-stagger">
               {[
                 { icon: Shield, label: 'Detecção 24/7' },
                 { icon: MapPin, label: 'GPS em tempo real' },
@@ -116,7 +117,7 @@ export default function Acesso() {
             </button>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4 lg:max-w-md">
+          <form onSubmit={handleSubmit} className="space-y-4 lg:max-w-md fx-stagger">
             {isSignup && (
               <Field label="Nome completo" icon={UserIcon}>
                 <input

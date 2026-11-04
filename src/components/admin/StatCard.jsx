@@ -12,7 +12,7 @@ export default function StatCard({ icon: Icon, label, value, trend, color = 'blu
 
   return (
     <div
-      className="rounded-2xl p-4"
+      className="rounded-2xl p-4 fx-card"
       style={{ background: '#FFFFFF', border: '1px solid #C4D0E5' }}
     >
       <div className="flex items-start justify-between mb-3">

@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
+import { useAuth } from '@/lib/AuthContext';
 import { useQuery } from '@tanstack/react-query';
 import {
   Users, AlertTriangle, ShieldCheck, TrendingUp, Activity,
-  Baby, Clock, Download, ArrowLeft, Lock, Loader2,
+  Baby, Clock, Download, ArrowLeft, Loader2,
 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { format, startOfMonth, eachDayOfInterval, endOfMonth } from 'date-fns';
@@ -25,32 +26,21 @@ const TYPE_LABELS = {
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [me, setMe] = useState(null);
-  const [authChecked, setAuthChecked] = useState(false);
+  const { user: me } = useAuth();
   const [downloadingPdf, setDownloadingPdf] = useState(false);
-
-  useEffect(() => {
-    base44.auth.me()
-      .then(u => { setMe(u); setAuthChecked(true); })
-      .catch(() => setAuthChecked(true));
-  }, []);
-
-  const isAuthorized = !!(me && (me.role === 'admin' || me.role === 'owner'));
 
   const { data: users = [] } = useQuery({
     queryKey: ['admin-users'],
-    queryFn: () => base44.entities.User.list('-created_date', 500),
-    enabled: isAuthorized,
+    queryFn: () => base44.entities.User.list('-created_date', 500).catch(() => []),
   });
   const { data: alerts = [] } = useQuery({
     queryKey: ['admin-alerts'],
     queryFn: () => base44.entities.Alert.list('-created_date', 500),
-    enabled: isAuthorized,
+    refetchInterval: 30000,
   });
   const { data: parentalLinks = [] } = useQuery({
     queryKey: ['admin-parental'],
     queryFn: () => base44.entities.ParentalLink.list('-created_date', 500),
-    enabled: isAuthorized,
   });
 
   const handleDownloadReport = async () => {
@@ -75,43 +65,6 @@ export default function AdminDashboard() {
       setDownloadingPdf(false);
     }
   };
-
-  if (!authChecked) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div
-          className="w-8 h-8 rounded-full animate-spin"
-          style={{ border: '2px solid #C4D0E5', borderTopColor: '#1743B8' }}
-        />
-      </div>
-    );
-  }
-
-  if (!isAuthorized) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center px-6">
-        <div className="text-center max-w-sm">
-          <div
-            className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4"
-            style={{ background: '#FBEAEC', border: '1px solid #F1C5CA' }}
-          >
-            <Lock size={32} style={{ color: '#A81825' }} />
-          </div>
-          <h1 className="font-display text-3xl mb-2" style={{ color: '#0C1A38' }}>Acesso Restrito</h1>
-          <p className="text-sm mb-6" style={{ color: '#607090' }}>
-            Esta área é exclusiva para administradores e donos da empresa.
-          </p>
-          <button
-            onClick={() => navigate('/')}
-            className="px-6 py-3 rounded-xl font-bold text-sm transition-colors"
-            style={{ background: '#1743B8', color: '#FFFFFF' }}
-          >
-            Voltar ao app
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   // ===== métricas =====
   const now = new Date();
@@ -144,7 +97,7 @@ export default function AdminDashboard() {
   }));
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background fx-page">
       {/* Top bar */}
       <header
         className="sticky top-0 z-10"
@@ -171,7 +124,7 @@ export default function AdminDashboard() {
               className="hidden sm:inline-flex text-xs px-3 py-1.5 rounded-full font-semibold capitalize"
               style={{ background: '#EBF0F8', color: '#1743B8', border: '1px solid #C4D0E5' }}
             >
-              {me.role}
+              {me?.role || 'admin'}
             </span>
             <button
               onClick={handleDownloadReport}
@@ -189,7 +142,7 @@ export default function AdminDashboard() {
       <div className="max-w-6xl mx-auto px-5 py-6 space-y-5">
         {/* Hero — agora sólido na cor primária */}
         <section
-          className="rounded-2xl p-5 sm:p-6"
+          className="rounded-2xl p-5 sm:p-6 fx-card"
           style={{ background: '#1743B8', color: '#FFFFFF' }}
         >
           <div className="flex items-start justify-between flex-wrap gap-4">
@@ -198,7 +151,7 @@ export default function AdminDashboard() {
                 Visão geral · {format(now, "MMMM 'de' yyyy", { locale: ptBR })}
               </p>
               <h2 className="font-display text-3xl sm:text-4xl text-white leading-tight">
-                Olá, {me.full_name?.split(' ')[0] || 'Admin'}
+                Olá, {me?.full_name?.split(' ')[0] || 'Admin'}
               </h2>
               <p className="text-sm mt-2 font-medium" style={{ color: '#DDE6FA' }}>
                 {monthAlerts.length} alertas registrados este mês · {users.length} usuários ativos
@@ -215,7 +168,7 @@ export default function AdminDashboard() {
         </section>
 
         {/* Stats grid */}
-        <section className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 fx-stagger">
           <StatCard icon={Users} label="Usuários totais" value={users.length} color="blue" />
           <StatCard icon={AlertTriangle} label="Alertas ativos" value={activeAlerts.length} color="red" />
           <StatCard icon={ShieldCheck} label="Resolvidos" value={resolvedAlerts.length} color="green" />
@@ -223,7 +176,7 @@ export default function AdminDashboard() {
         </section>
 
         {/* Charts */}
-        <section className="grid lg:grid-cols-2 gap-4">
+        <section className="grid lg:grid-cols-2 gap-4 fx-stagger">
           <AlertsChart data={chartData} />
           {pieData.length > 0 ? (
             <AlertTypesChart data={pieData} />
@@ -238,7 +191,7 @@ export default function AdminDashboard() {
         </section>
 
         {/* Quick metrics */}
-        <section className="grid sm:grid-cols-3 gap-3">
+        <section className="grid sm:grid-cols-3 gap-3 fx-stagger">
           <MetricRow icon={Activity} label="Tempo médio de resposta" value="2m 14s" sub="-18% vs mês anterior" />
           <MetricRow icon={TrendingUp} label="Engajamento diário"     value="87%"    sub="usuários ativos" />
           <MetricRow icon={Clock}      label="Uptime do sistema"      value="99.97%" sub="últimos 30 dias" />
@@ -246,7 +199,7 @@ export default function AdminDashboard() {
 
         {/* Recent activity */}
         <section
-          className="rounded-2xl p-4"
+          className="rounded-2xl p-4 fx-card"
           style={{ background: '#FFFFFF', border: '1px solid #C4D0E5' }}
         >
           <div className="flex items-center justify-between mb-4">
@@ -274,7 +227,7 @@ export default function AdminDashboard() {
 function MetricRow({ icon: Icon, label, value, sub }) {
   return (
     <div
-      className="rounded-2xl p-4"
+      className="rounded-2xl p-4 fx-card"
       style={{ background: '#FFFFFF', border: '1px solid #C4D0E5' }}
     >
       <div className="flex items-center gap-3">

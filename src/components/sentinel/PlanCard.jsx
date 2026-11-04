@@ -6,7 +6,7 @@ export default function PlanCard({ plan, onSelect, loading }) {
 
   return (
     <div
-      className="relative rounded-2xl p-5 flex flex-col"
+      className="relative rounded-2xl p-5 flex flex-col fx-card"
       style={{
         background: '#FFFFFF',
         border: highlight ? '2px solid #1743B8' : '1px solid #C4D0E5',

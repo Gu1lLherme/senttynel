@@ -20,7 +20,7 @@ export default function BemVindo() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background fx-page">
       {/* MOBILE LAYOUT */}
       <div className="lg:hidden min-h-screen px-6 py-10 flex flex-col max-w-md mx-auto">
         <div className="flex-shrink-0 flex justify-center pt-4">
@@ -36,12 +36,12 @@ export default function BemVindo() {
           </p>
         </div>
 
-        <div className="flex-1 grid grid-cols-2 gap-3 mb-8">
+        <div className="flex-1 grid grid-cols-2 gap-3 mb-8 fx-stagger">
           {features.map(({ icon: Icon, label, desc }) => (
             <div
               key={label}
               className="rounded-2xl p-4 flex flex-col items-start gap-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-900/10 hover:border-blue-300"
-              style={{ background: '#FFFFFF', border: '1px solid #C4D0E5' }}
+              style={{ background: '#FFFFFF', border: '1px solid #C4D0E5', boxShadow: '0 4px 16px rgba(12, 26, 56, 0.06)' }}
             >
               <div
                 className="w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
@@ -125,12 +125,12 @@ export default function BemVindo() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 fx-stagger">
             {desktopFeatures.map(({ icon: Icon, label, desc }) => (
               <div
                 key={label}
                 className="group rounded-2xl p-6 flex flex-col gap-3 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-blue-900/10 hover:border-blue-300 cursor-default"
-                style={{ background: '#FFFFFF', border: '1px solid #C4D0E5' }}
+                style={{ background: '#FFFFFF', border: '1px solid #C4D0E5', boxShadow: '0 6px 22px rgba(12, 26, 56, 0.07)' }}
               >
                 <div
                   className="w-12 h-12 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3"

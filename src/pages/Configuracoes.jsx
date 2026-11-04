@@ -11,7 +11,6 @@ export default function Configuracoes() {
   const navigate = useNavigate();
   const { user: me, logout } = useAuth();
 
-  const isAdmin = me?.role === 'admin' || me?.role === 'owner';
   const handleLogout = () => logout();
 
   return (
@@ -30,14 +29,12 @@ export default function Configuracoes() {
         subtitle="Básico, Premium e Family"
       />
 
-      {isAdmin && (
-        <NavCard
-          onClick={() => navigate('/administrativo/dashboard')}
-          icon={LayoutDashboard}
-          title="Dashboard Administrativo"
-          subtitle="Métricas, alertas e relatórios"
-        />
-      )}
+      <NavCard
+        onClick={() => navigate('/administrativo/dashboard')}
+        icon={LayoutDashboard}
+        title="Dashboard Administrativo"
+        subtitle="Métricas, alertas e relatórios"
+      />
 
       <Section icon={Shield} title="Status dos Sensores">
         <div className="space-y-2">

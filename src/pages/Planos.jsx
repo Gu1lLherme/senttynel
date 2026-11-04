@@ -79,7 +79,7 @@ export default function Planos() {
   };
 
   return (
-    <div className="min-h-screen bg-background px-5 pt-8 pb-12">
+    <div className="min-h-screen bg-background px-5 pt-8 pb-12 fx-page">
       <div className="max-w-5xl mx-auto">
         <button
           onClick={() => navigate(-1)}
@@ -90,7 +90,7 @@ export default function Planos() {
           Voltar
         </button>
 
-        <div className="text-center mb-8">
+        <div className="text-center mb-8 fx-stagger">
           <div
             className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-3"
             style={{ background: '#EBF0F8', color: '#1743B8', border: '1px solid #C4D0E5' }}
@@ -106,7 +106,7 @@ export default function Planos() {
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 fx-stagger">
           {PLANS.map(plan => (
             <PlanCard
               key={plan.id}
